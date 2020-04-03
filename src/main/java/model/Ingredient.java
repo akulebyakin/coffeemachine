@@ -13,6 +13,13 @@ public class Ingredient {
         this.unit = unit;
     }
 
+    public Ingredient(String name, int balance, String unit) {
+        this.id = id;
+        this.name = name;
+        this.balance = balance;
+        this.unit = unit;
+    }
+
     public int getId() {
         return id;
     }
@@ -29,10 +36,14 @@ public class Ingredient {
         return unit;
     }
 
+    //    @Override
+//    public String toString() {
+//        return "id:\t" + id + "\n" +
+//                "name:\t" + name + "\n" +
+//                "balance:\t" + balance + " " + unit;
+//    }
     @Override
     public String toString() {
-        return "id:\t" + id + "\n" +
-                "name:\t" + name + "\n" +
-                "balance:\t" + balance + " " + unit;
+        return "id: " + id + ", name: " + name + ", balance: " + balance + " " + unit;
     }
 }

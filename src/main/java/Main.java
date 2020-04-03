@@ -1,39 +1,28 @@
-import dao.impl.ConnectionFactory;
+import dao.impl.IngredientDAOImpl;
+import dao.impl.RecipeDAOImpl;
+import model.Ingredient;
 
-import java.sql.*;
+import java.util.List;
 
 public class Main {
-    private static Connection connection;
-    private static Statement statement;
-    private static ResultSet rs;
+    private static IngredientDAOImpl ingredientDAO;
+    private static RecipeDAOImpl recipeDAO;
 
     public static void main(String[] args) {
-        String query = "select * from ingredients";
-
         try {
-            connection = ConnectionFactory.getConnection();
-            statement = connection.createStatement();
-            rs = statement.executeQuery(query);
-
-            while (rs.next()) {
-                int id = rs.getInt(1);
-                String name = rs.getString(2);
-                System.out.println(id + ". name: " + name);
+            ingredientDAO = new IngredientDAOImpl();
+            List<Ingredient> list = ingredientDAO.getAll();
+            for (Ingredient ingredient : list) {
+                System.out.println(ingredient);
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException se) { /*can't do anything */ }
-            try {
-                statement.close();
-
-            } catch (SQLException se) { /*can't do anything */ }
-            try {
-                rs.close();
-            } catch (SQLException se) { /*can't do anything */ }
         }
-
+//        try {
+//            recipeDAO = new RecipeDAOImpl();
+//            System.out.println(recipeDAO.get(1));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 }

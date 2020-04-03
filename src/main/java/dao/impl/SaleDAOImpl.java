@@ -1,50 +1,50 @@
 package dao.impl;
 
 import dao.DAO;
-import model.Recipe;
+import model.Sale;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-//id	name	ingredient_ids	ingredient_amount	price	available	total_sold
-public class RecipeDAOImpl implements DAO<Recipe, Integer> {
+// id	name	quantity	total_price	paid_by_cash	paid_by_card	date
+public class SaleDAOImpl implements DAO<Sale, Integer> {
     private Connection connection = null;
     private Statement statement = null;
     private PreparedStatement ps = null;
     private ResultSet rs = null;
 
     @Override
-    public void insert(Recipe recipe) {
+    public void insert(Sale sale) {
         try {
             connection = ConnectionFactory.getConnection();
-            ps = connection.prepareStatement("INSERT INTO recipes " +
+            ps = connection.prepareStatement("INSERT INTO drinks_sold " +
                     "VALUES (DEFAULT, ?, ?, ?, ?, ?, ?)");
-            ps.setString(1, recipe.getName());
-            ps.setString(2, recipe.getIngredient_ids());
-            ps.setString(3, recipe.getIngredient_amount());
-            ps.setInt(4, recipe.getPrice());
-            ps.setBoolean(5, recipe.isAvailable());
-            ps.setInt(6, recipe.getTotalSold());
+            ps.setString(1, sale.getName());
+            ps.setInt(2, sale.getQuantity());
+            ps.setInt(3, sale.getTotalPrice());
+            ps.setInt(4, sale.getPaidByCash());
+            ps.setInt(5, sale.getPaidByCard());
+            ps.setDate(6, sale.getDate());
             ps.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException("Error inserting the recipe", e);
+            throw new RuntimeException("Error inserting the sale", e);
         } finally {
             closeConnection();
         }
     }
 
     @Override
-    public Recipe get(Integer key) {
+    public Sale get(Integer key) {
         try {
             connection = ConnectionFactory.getConnection();
             statement = connection.createStatement();
-            rs = statement.executeQuery("SELECT * FROM recipes WHERE id = " + key);
+            rs = statement.executeQuery("SELECT * FROM drinks_sold WHERE id = " + key);
             if (rs.next()) {
-                return getRecipeFromResultSet(rs);
+                return getSaleFromResultSet(rs);
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error getting the recipe", e);
+            throw new RuntimeException("Error getting the sale", e);
         } finally {
             closeConnection();
         }
@@ -52,38 +52,39 @@ public class RecipeDAOImpl implements DAO<Recipe, Integer> {
     }
 
     @Override
-    public List<Recipe> getAll() {
-        List<Recipe> list = new ArrayList<>();
+    public List<Sale> getAll() {
+        List<Sale> list = new ArrayList<>();
         try {
             connection = ConnectionFactory.getConnection();
             statement = connection.createStatement();
-            rs = statement.executeQuery("SELECT * FROM recipes");
+            rs = statement.executeQuery("SELECT * FROM drinks_sold");
             while (rs.next()) {
-                list.add(getRecipeFromResultSet(rs));
+                list.add(getSaleFromResultSet(rs));
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error getting all recipes", e);
+            throw new RuntimeException("Error getting all sales", e);
         } finally {
             closeConnection();
         }
         return list;
     }
 
+    // id	name	quantity	total_price	paid_by_cash	paid_by_card	date
     @Override
-    public void update(Integer key, Recipe recipe) {
+    public void update(Integer key, Sale sale) {
         try {
             connection = ConnectionFactory.getConnection();
-            ps = connection.prepareStatement("UPDATE recipes SET name=?, ingredient_ids=?, ingredient_amount=?," +
-                    " price=?, available=?, total_sold=? WHERE id = " + key);
-            ps.setString(1, recipe.getName());
-            ps.setString(2, recipe.getIngredient_ids());
-            ps.setString(3, recipe.getIngredient_amount());
-            ps.setInt(4, recipe.getPrice());
-            ps.setBoolean(5, recipe.isAvailable());
-            ps.setInt(6, recipe.getTotalSold());
+            ps = connection.prepareStatement("UPDATE drinks_sold SET name=?, quantity=?, total_price=?," +
+                    " paid_by_cash=?, paid_by_card=?, date=? WHERE id = " + key);
+            ps.setString(1, sale.getName());
+            ps.setInt(2, sale.getQuantity());
+            ps.setInt(3, sale.getTotalPrice());
+            ps.setInt(4, sale.getPaidByCash());
+            ps.setInt(5, sale.getPaidByCard());
+            ps.setDate(6, sale.getDate());
             ps.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException("Error updating the recipe", e);
+            throw new RuntimeException("Error updating the sale", e);
         } finally {
             closeConnection();
         }
@@ -94,24 +95,24 @@ public class RecipeDAOImpl implements DAO<Recipe, Integer> {
         try {
             connection = ConnectionFactory.getConnection();
             statement = connection.createStatement();
-            statement.executeUpdate("DELETE FROM recipes WHERE id = " + key);
+            statement.executeUpdate("DELETE FROM drinks_sold WHERE id = " + key);
         } catch (SQLException e) {
-            throw new RuntimeException("Error deleting the ingredient", e);
+            throw new RuntimeException("Error deleting the sale", e);
         } finally {
             closeConnection();
         }
     }
 
-    private Recipe getRecipeFromResultSet(ResultSet rs) throws SQLException {
+    private Sale getSaleFromResultSet(ResultSet rs) throws SQLException {
         int id = rs.getInt("id");
         String name = rs.getString("name");
-        String ingredient_ids = rs.getString("ingredient_ids");
-        String ingredient_amount = rs.getString("ingredient_amount");
-        int price = rs.getInt("price");
-        boolean available = rs.getBoolean("available");
-        int total_sold = rs.getInt("total_sold");
+        int quantity = rs.getInt("quantity");
+        int total_price = rs.getInt("total_price");
+        int paid_by_cash = rs.getInt("paid_by_cash");
+        int paid_by_card = rs.getInt("paid_by_card");
+        Date date = rs.getDate("date");
 
-        return new Recipe(id, name, ingredient_ids, ingredient_amount, price, available, total_sold);
+        return new Sale(id, name, quantity, total_price, paid_by_cash, paid_by_card, date);
     }
 
     private void closeConnection() {
