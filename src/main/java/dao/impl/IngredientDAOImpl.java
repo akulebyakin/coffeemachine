@@ -54,7 +54,8 @@ public class IngredientDAOImpl implements DAO<Ingredient, Integer> {
     public Ingredient getByParameter(String parameter, String value) {
         try {
             connection = ConnectionFactory.getConnection();
-            ps = connection.prepareStatement("SELECT * FROM ingredients WHERE " + parameter + " = " + value);
+            ps = connection.prepareStatement("SELECT * FROM ingredients WHERE " + parameter + " = ?");
+            ps.setString(1, value);
             rs = ps.executeQuery();
             if (rs.next()) {
                 return getIngredientFromResultSet(rs);
