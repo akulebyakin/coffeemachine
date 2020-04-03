@@ -52,6 +52,23 @@ public class RecipeDAOImpl implements DAO<Recipe, Integer> {
     }
 
     @Override
+    public Recipe getByParameter(String parameter, String value) {
+        try {
+            connection = ConnectionFactory.getConnection();
+            statement = connection.createStatement();
+            rs = statement.executeQuery("SELECT * FROM recipes WHERE " + parameter + " = " + value);
+            if (rs.next()) {
+                return getRecipeFromResultSet(rs);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error getting the recipe by parameter " + parameter, e);
+        } finally {
+            closeConnection();
+        }
+        return null;
+    }
+
+    @Override
     public List<Recipe> getAll() {
         List<Recipe> list = new ArrayList<>();
         try {

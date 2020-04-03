@@ -52,6 +52,23 @@ public class IngredientDAOImpl implements DAO<Ingredient, Integer> {
     }
 
     @Override
+    public Ingredient getByParameter(String parameter, String value) {
+        try {
+            connection = ConnectionFactory.getConnection();
+            statement = connection.createStatement();
+            rs = statement.executeQuery("SELECT * FROM ingredients WHERE " + parameter + " = " + value);
+            if (rs.next()) {
+                return getIngredientFromResultSet(rs);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error getting the ingredient by parameter " + parameter, e);
+        } finally {
+            closeConnection();
+        }
+        return null;
+    }
+
+    @Override
     public List<Ingredient> getAll() {
         List<Ingredient> list = new ArrayList<>();
         try {

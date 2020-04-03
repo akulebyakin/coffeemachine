@@ -52,6 +52,23 @@ public class SaleDAOImpl implements DAO<Sale, Integer> {
     }
 
     @Override
+    public Sale getByParameter(String parameter, String value) {
+        try {
+            connection = ConnectionFactory.getConnection();
+            statement = connection.createStatement();
+            rs = statement.executeQuery("SELECT * FROM drinks_sold WHERE " + parameter + " = " + value);
+            if (rs.next()) {
+                return getSaleFromResultSet(rs);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error getting the sale by parameter " + parameter, e);
+        } finally {
+            closeConnection();
+        }
+        return null;
+    }
+
+    @Override
     public List<Sale> getAll() {
         List<Sale> list = new ArrayList<>();
         try {
@@ -69,7 +86,6 @@ public class SaleDAOImpl implements DAO<Sale, Integer> {
         return list;
     }
 
-    // id	name	quantity	total_price	paid_by_cash	paid_by_card	date
     @Override
     public void update(Integer key, Sale sale) {
         try {

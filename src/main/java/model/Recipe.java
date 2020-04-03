@@ -19,6 +19,14 @@ public class Recipe {
         this.available = available;
         this.totalSold = total_sold;
     }
+    public Recipe(String name, String ingredient_ids, String ingredient_amount,
+                  int price, boolean available) {
+        this.name = name;
+        this.ingredient_ids = ingredient_ids;
+        this.ingredient_amount = ingredient_amount;
+        this.price = price;
+        this.available = available;
+    }
 
     public int getId() {
         return id;
