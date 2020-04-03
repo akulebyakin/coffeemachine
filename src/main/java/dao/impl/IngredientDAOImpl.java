@@ -10,7 +10,6 @@ import java.util.List;
 //  Ingredients columns: id, name, balance, unit
 public class IngredientDAOImpl implements DAO<Ingredient, Integer> {
     private Connection connection = null;
-    private Statement statement = null;
     private PreparedStatement ps = null;
     private ResultSet rs = null;
 
@@ -38,8 +37,8 @@ public class IngredientDAOImpl implements DAO<Ingredient, Integer> {
     public Ingredient get(Integer key) {
         try {
             connection = ConnectionFactory.getConnection();
-            statement = connection.createStatement();
-            rs = statement.executeQuery("SELECT * FROM ingredients WHERE id = " + key);
+            ps = connection.prepareStatement("SELECT * FROM ingredients WHERE id = " + key);
+            rs = ps.executeQuery();
             if (rs.next()) {
                 return getIngredientFromResultSet(rs);
             }
@@ -55,8 +54,8 @@ public class IngredientDAOImpl implements DAO<Ingredient, Integer> {
     public Ingredient getByParameter(String parameter, String value) {
         try {
             connection = ConnectionFactory.getConnection();
-            statement = connection.createStatement();
-            rs = statement.executeQuery("SELECT * FROM ingredients WHERE " + parameter + " = " + value);
+            ps = connection.prepareStatement("SELECT * FROM ingredients WHERE " + parameter + " = " + value);
+            rs = ps.executeQuery();
             if (rs.next()) {
                 return getIngredientFromResultSet(rs);
             }
@@ -73,8 +72,8 @@ public class IngredientDAOImpl implements DAO<Ingredient, Integer> {
         List<Ingredient> list = new ArrayList<>();
         try {
             connection = ConnectionFactory.getConnection();
-            statement = connection.createStatement();
-            rs = statement.executeQuery("SELECT * FROM ingredients");
+            ps = connection.prepareStatement("SELECT * FROM ingredients");
+            rs = ps.executeQuery();
             while (rs.next()) {
                 list.add(getIngredientFromResultSet(rs));
             }
@@ -106,8 +105,8 @@ public class IngredientDAOImpl implements DAO<Ingredient, Integer> {
     public void delete(Integer key) {
         try {
             connection = ConnectionFactory.getConnection();
-            statement = connection.createStatement();
-            statement.executeUpdate("DELETE FROM ingredients WHERE id = " + key);
+            ps = connection.prepareStatement("DELETE FROM ingredients WHERE id = " + key);
+            ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Error deleting the ingredient", e);
         } finally {
@@ -134,11 +133,6 @@ public class IngredientDAOImpl implements DAO<Ingredient, Integer> {
             if (ps != null) ps.close();
         } catch (SQLException e) {
             throw new RuntimeException("Error closing prepared statement", e);
-        }
-        try {
-            if (statement != null) statement.close();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error closing statement", e);
         }
         try {
             if (connection != null) connection.close();

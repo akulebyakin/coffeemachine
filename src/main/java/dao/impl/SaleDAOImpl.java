@@ -10,7 +10,6 @@ import java.util.List;
 // id	name	quantity	total_price	paid_by_cash	paid_by_card	date
 public class SaleDAOImpl implements DAO<Sale, Integer> {
     private Connection connection = null;
-    private Statement statement = null;
     private PreparedStatement ps = null;
     private ResultSet rs = null;
 
@@ -38,8 +37,8 @@ public class SaleDAOImpl implements DAO<Sale, Integer> {
     public Sale get(Integer key) {
         try {
             connection = ConnectionFactory.getConnection();
-            statement = connection.createStatement();
-            rs = statement.executeQuery("SELECT * FROM drinks_sold WHERE id = " + key);
+            ps = connection.prepareStatement("SELECT * FROM drinks_sold WHERE id = " + key);
+            rs = ps.executeQuery();
             if (rs.next()) {
                 return getSaleFromResultSet(rs);
             }
@@ -55,8 +54,8 @@ public class SaleDAOImpl implements DAO<Sale, Integer> {
     public Sale getByParameter(String parameter, String value) {
         try {
             connection = ConnectionFactory.getConnection();
-            statement = connection.createStatement();
-            rs = statement.executeQuery("SELECT * FROM drinks_sold WHERE " + parameter + " = " + value);
+            ps = connection.prepareStatement("SELECT * FROM drinks_sold WHERE " + parameter + " = " + value);
+            rs = ps.executeQuery();
             if (rs.next()) {
                 return getSaleFromResultSet(rs);
             }
@@ -73,8 +72,8 @@ public class SaleDAOImpl implements DAO<Sale, Integer> {
         List<Sale> list = new ArrayList<>();
         try {
             connection = ConnectionFactory.getConnection();
-            statement = connection.createStatement();
-            rs = statement.executeQuery("SELECT * FROM drinks_sold");
+            ps = connection.prepareStatement("SELECT * FROM drinks_sold");
+            rs = ps.executeQuery();
             while (rs.next()) {
                 list.add(getSaleFromResultSet(rs));
             }
@@ -110,8 +109,8 @@ public class SaleDAOImpl implements DAO<Sale, Integer> {
     public void delete(Integer key) {
         try {
             connection = ConnectionFactory.getConnection();
-            statement = connection.createStatement();
-            statement.executeUpdate("DELETE FROM drinks_sold WHERE id = " + key);
+            ps = connection.prepareStatement("DELETE FROM drinks_sold WHERE id = " + key);
+            ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Error deleting the sale", e);
         } finally {
@@ -141,11 +140,6 @@ public class SaleDAOImpl implements DAO<Sale, Integer> {
             if (ps != null) ps.close();
         } catch (SQLException e) {
             throw new RuntimeException("Error closing prepared statement", e);
-        }
-        try {
-            if (statement != null) statement.close();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error closing statement", e);
         }
         try {
             if (connection != null) connection.close();
