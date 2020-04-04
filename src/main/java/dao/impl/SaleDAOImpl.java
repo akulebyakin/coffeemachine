@@ -22,14 +22,14 @@ public class SaleDAOImpl implements DAO<Sale, Integer> {
         try {
             connection = ConnectionFactory.getConnection();
             ps = connection.prepareStatement("INSERT INTO drinks_sold " +
-                    "VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?)");
+                    "VALUES (DEFAULT, ?, ?, ?, ?, ?, DEFAULT, ?)");
             ps.setString(1, sale.getName());
             ps.setInt(2, sale.getQuantity());
             ps.setInt(3, sale.getTotalPrice());
             ps.setInt(4, sale.getPaidByCash());
             ps.setInt(5, sale.getPaidByCard());
-            ps.setDate(6, sale.getDate());
-            ps.setString(7, sale.getClientName());
+//            ps.setDate(6, sale.getDate());
+            ps.setString(6, sale.getClientName());
             return ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Error inserting the sale", e);
@@ -59,7 +59,8 @@ public class SaleDAOImpl implements DAO<Sale, Integer> {
     public Sale getByParameter(String parameter, String value) {
         try {
             connection = ConnectionFactory.getConnection();
-            ps = connection.prepareStatement("SELECT * FROM drinks_sold WHERE " + parameter + " = " + value);
+            ps = connection.prepareStatement("SELECT * FROM drinks_sold WHERE " + parameter + " = ?");
+            ps.setString(1, value);
             rs = ps.executeQuery();
             if (rs.next()) {
                 return getSaleFromResultSet(rs);

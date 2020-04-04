@@ -41,6 +41,11 @@ public class Main {
         while (!operation.equals("exit")) {
             System.out.print("Operation: ");
             operation = scanner.nextLine();
+            if (operation.matches("make \\w+")) {
+                String coffeeName = operation.substring(4).trim();
+                clientService.makeCoffee(coffeeName, userName, "card");
+                continue;
+            }
             switch (operation) {
                 case "menu": {
                     Printer.printList(clientService.getMenu());

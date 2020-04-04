@@ -9,5 +9,5 @@ public interface ClientService {
     List<String> getMostPopularDrinks();
 
     // make
-    int makeCoffee(String name);
+    int makeCoffee(String coffeeName, String clientName, String payMethod);
 }

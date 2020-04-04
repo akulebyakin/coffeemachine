@@ -2,8 +2,10 @@ package service.impl;
 
 import dao.impl.IngredientDAOImpl;
 import dao.impl.RecipeDAOImpl;
+import dao.impl.SaleDAOImpl;
 import model.Ingredient;
 import model.Recipe;
+import model.Sale;
 import service.ClientService;
 
 import java.util.ArrayList;
@@ -55,7 +57,19 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public int makeCoffee(String name) {
-        return -1;
+    public int makeCoffee(String coffeeName, String clientName, String payMethod) {
+        SaleDAOImpl saleDAO = new SaleDAOImpl();
+        Recipe recipe = new RecipeDAOImpl().getByParameter("name", coffeeName);
+        Sale sale = new Sale(coffeeName, 1, clientName);
+        int price = recipe.getPrice();
+
+        sale.setTotalPrice(price);
+        if (payMethod.toLowerCase().equals("card")) {
+            sale.setPaidByCard(price);
+        } else {
+            sale.setPaidByCash(price);
+        }
+
+        return saleDAO.insert(sale);
     }
 }

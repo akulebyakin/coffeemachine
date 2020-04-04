@@ -44,6 +44,18 @@ public class Sale {
         return clientName;
     }
 
+    public void setTotalPrice(int totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public void setPaidByCash(int paidByCash) {
+        this.paidByCash = paidByCash;
+    }
+
+    public void setPaidByCard(int paidByCard) {
+        this.paidByCard = paidByCard;
+    }
+
     public Sale(int id, String name, int quantity, int totalPrice, int paidByCash, int paidByCard, Date date, String clientName) {
         this.id = id;
         this.name = name;
@@ -52,6 +64,12 @@ public class Sale {
         this.paidByCash = paidByCash;
         this.paidByCard = paidByCard;
         this.date = date;
+        this.clientName = clientName;
+    }
+
+    public Sale (String name, int quantity, String clientName) {
+        this.name = name;
+        this.quantity = quantity;
         this.clientName = clientName;
     }
 
