@@ -10,6 +10,7 @@ public class Sale {
     private int paidByCash;
     private int paidByCard;
     private Date date;
+    private final String clientName;
 
     public int getId() {
         return id;
@@ -39,7 +40,11 @@ public class Sale {
         return date;
     }
 
-    public Sale(int id, String name, int quantity, int totalPrice, int paidByCash, int paidByCard, Date date) {
+    public String getClientName() {
+        return clientName;
+    }
+
+    public Sale(int id, String name, int quantity, int totalPrice, int paidByCash, int paidByCard, Date date, String clientName) {
         this.id = id;
         this.name = name;
         this.quantity = quantity;
@@ -47,6 +52,7 @@ public class Sale {
         this.paidByCash = paidByCash;
         this.paidByCard = paidByCard;
         this.date = date;
+        this.clientName = clientName;
     }
 
     @Override

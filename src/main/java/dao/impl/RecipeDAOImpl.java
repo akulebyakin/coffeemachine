@@ -14,7 +14,7 @@ public class RecipeDAOImpl implements DAO<Recipe, Integer> {
     private ResultSet rs = null;
 
     @Override
-    public void insert(Recipe recipe) {
+    public int insert(Recipe recipe) {
         try {
             connection = ConnectionFactory.getConnection();
             ps = connection.prepareStatement("INSERT INTO recipes " +
@@ -25,7 +25,7 @@ public class RecipeDAOImpl implements DAO<Recipe, Integer> {
             ps.setInt(4, recipe.getPrice());
             ps.setBoolean(5, recipe.isAvailable());
             ps.setInt(6, recipe.getTotalSold());
-            ps.executeUpdate();
+            return ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Error inserting the recipe", e);
         } finally {
@@ -86,7 +86,7 @@ public class RecipeDAOImpl implements DAO<Recipe, Integer> {
     }
 
     @Override
-    public void update(Integer key, Recipe recipe) {
+    public int update(Integer key, Recipe recipe) {
         try {
             connection = ConnectionFactory.getConnection();
             ps = connection.prepareStatement("UPDATE recipes SET name=?, ingredient_ids=?, ingredient_amount=?," +
@@ -97,7 +97,7 @@ public class RecipeDAOImpl implements DAO<Recipe, Integer> {
             ps.setInt(4, recipe.getPrice());
             ps.setBoolean(5, recipe.isAvailable());
             ps.setInt(6, recipe.getTotalSold());
-            ps.executeUpdate();
+            return ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Error updating the recipe", e);
         } finally {
@@ -106,11 +106,11 @@ public class RecipeDAOImpl implements DAO<Recipe, Integer> {
     }
 
     @Override
-    public void delete(Integer key) {
+    public int delete(Integer key) {
         try {
             connection = ConnectionFactory.getConnection();
             ps = connection.prepareStatement("DELETE FROM recipes WHERE id = " + key);
-            ps.executeUpdate();
+            return ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Error deleting the ingredient", e);
         } finally {

@@ -1,11 +1,13 @@
 package service;
 
+import java.util.List;
+
 public interface ClientService {
     // get
-    void getMenu();
-    void getDrinkComposition();
-    void getMostPopularDrinks();
+    List<String> getMenu();
+    List<String> getDrinkComposition();
+    List<String> getMostPopularDrinks();
 
     // make
-    boolean makeCoffee(String name);
+    int makeCoffee(String name);
 }

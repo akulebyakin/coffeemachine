@@ -1,7 +1,9 @@
 import service.AdminService;
 import service.ClientService;
+import service.impl.AdminServiceImpl;
+import service.impl.ClientServiceImpl;
+import tools.Printer;
 
-import java.lang.reflect.Method;
 import java.util.Scanner;
 
 public class Main {
@@ -13,24 +15,47 @@ public class Main {
         System.out.print("My name is: ");
         Scanner scanner = new Scanner(System.in);
         userName = scanner.nextLine();
-        System.out.println("So " + userName + ", you're our client or administrator?");
-        while (!userRole.equals("client") && !userRole.equals("administrator")) {
-            System.out.print("I'am (client / administrator): ");
-            userRole = scanner.nextLine().toLowerCase();
-        }
-        System.out.println("That's what you can do: ");
-        Method[] clientMethods = ClientService.class.getMethods();
-        Method[] adminMethods = AdminService.class.getMethods();
-        System.out.println("Client methods");
-        for (int i = 0; i < clientMethods.length; i++) {
-            System.out.println(i + 1 + ". " + clientMethods[i].getName());
-        }
-        if (userRole.equals("administrator")) {
-            System.out.println("\nAdministrator Methods");
-            for (int i = 0; i < adminMethods.length; i++) {
-                System.out.println(i + 1 + ". " + adminMethods[i].getName());
+//        System.out.println("So " + userName + ", you're our client or administrator?");
+//        while (!userRole.equals("client") && !userRole.equals("administrator")) {
+//            System.out.print("I'am (client / administrator): ");
+//            userRole = scanner.nextLine().toLowerCase();
+//        }
+//        System.out.println("That's what you can do: ");
+//        Method[] clientMethods = ClientService.class.getMethods();
+//        Method[] adminMethods = AdminService.class.getMethods();
+//        System.out.println("Client methods");
+//        for (int i = 0; i < clientMethods.length; i++) {
+//            System.out.println(i + 1 + ". " + clientMethods[i].getName());
+//        }
+//        if (userRole.equals("administrator")) {
+//            System.out.println("\nAdministrator Methods");
+//            for (int i = 0; i < adminMethods.length; i++) {
+//                System.out.println(i + 1 + ". " + adminMethods[i].getName());
+//            }
+//        }
+        System.out.println("What do you want");
+        String operation = "";
+        ClientService clientService = new ClientServiceImpl();
+        AdminService adminService = new AdminServiceImpl();
 
+        while (!operation.equals("exit")) {
+            System.out.print("Operation: ");
+            operation = scanner.nextLine();
+            switch (operation) {
+                case "menu": {
+                    Printer.printList(clientService.getMenu());
+                    break;
+                }
+                case "getDrinkComposition": {
+                    Printer.printList(clientService.getDrinkComposition());
+                    break;
+                }
+                case "getAllRecipes": {
+                    Printer.printList(adminService.getAllRecipes());
+                    break;
+                }
             }
         }
+
     }
 }

@@ -21,14 +21,14 @@ public class IngredientDAOImpl implements DAO<Ingredient, Integer> {
 //    }
 
     @Override
-    public void insert(Ingredient ingredient) {
+    public int insert(Ingredient ingredient) {
         try {
             connection = ConnectionFactory.getConnection();
             ps = connection.prepareStatement("INSERT INTO  ingredients VALUES (DEFAULT, ?, ?, ?)");
             ps.setString(1, ingredient.getName());
             ps.setInt(2, ingredient.getBalance());
             ps.setString(3, ingredient.getUnit());
-            ps.executeUpdate();
+            return ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Error inserting the ingredient", e);
         } finally {
@@ -90,14 +90,14 @@ public class IngredientDAOImpl implements DAO<Ingredient, Integer> {
     }
 
     @Override
-    public void update(Integer key, Ingredient ingredient) {
+    public int update(Integer key, Ingredient ingredient) {
         try {
             connection = ConnectionFactory.getConnection();
             ps = connection.prepareStatement("UPDATE ingredients SET name=?, balance=?, unit=? WHERE id = " + key);
             ps.setString(1, ingredient.getName());
             ps.setInt(2, ingredient.getBalance());
             ps.setString(3, ingredient.getUnit());
-            ps.executeUpdate();
+            return ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Error updating the ingredient", e);
         } finally {
@@ -106,11 +106,11 @@ public class IngredientDAOImpl implements DAO<Ingredient, Integer> {
     }
 
     @Override
-    public void delete(Integer key) {
+    public int delete(Integer key) {
         try {
             connection = ConnectionFactory.getConnection();
             ps = connection.prepareStatement("DELETE FROM ingredients WHERE id = " + key);
-            ps.executeUpdate();
+            return ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Error deleting the ingredient", e);
         } finally {

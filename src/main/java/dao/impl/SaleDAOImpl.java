@@ -3,29 +3,34 @@ package dao.impl;
 import dao.DAO;
 import model.Sale;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-// id	name	quantity	total_price	paid_by_cash	paid_by_card	date
+// id	name	quantity	total_price	paid_by_cash	paid_by_card	date    client_name
 public class SaleDAOImpl implements DAO<Sale, Integer> {
     private Connection connection = null;
     private PreparedStatement ps = null;
     private ResultSet rs = null;
 
     @Override
-    public void insert(Sale sale) {
+    public int insert(Sale sale) {
         try {
             connection = ConnectionFactory.getConnection();
             ps = connection.prepareStatement("INSERT INTO drinks_sold " +
-                    "VALUES (DEFAULT, ?, ?, ?, ?, ?, ?)");
+                    "VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?)");
             ps.setString(1, sale.getName());
             ps.setInt(2, sale.getQuantity());
             ps.setInt(3, sale.getTotalPrice());
             ps.setInt(4, sale.getPaidByCash());
             ps.setInt(5, sale.getPaidByCard());
             ps.setDate(6, sale.getDate());
-            ps.executeUpdate();
+            ps.setString(7, sale.getClientName());
+            return ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Error inserting the sale", e);
         } finally {
@@ -86,18 +91,19 @@ public class SaleDAOImpl implements DAO<Sale, Integer> {
     }
 
     @Override
-    public void update(Integer key, Sale sale) {
+    public int update(Integer key, Sale sale) {
         try {
             connection = ConnectionFactory.getConnection();
             ps = connection.prepareStatement("UPDATE drinks_sold SET name=?, quantity=?, total_price=?," +
-                    " paid_by_cash=?, paid_by_card=?, date=? WHERE id = " + key);
+                    " paid_by_cash=?, paid_by_card=?, date=?, client_name=? WHERE id = " + key);
             ps.setString(1, sale.getName());
             ps.setInt(2, sale.getQuantity());
             ps.setInt(3, sale.getTotalPrice());
             ps.setInt(4, sale.getPaidByCash());
             ps.setInt(5, sale.getPaidByCard());
             ps.setDate(6, sale.getDate());
-            ps.executeUpdate();
+            ps.setString(7, sale.getClientName());
+            return ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Error updating the sale", e);
         } finally {
@@ -106,11 +112,11 @@ public class SaleDAOImpl implements DAO<Sale, Integer> {
     }
 
     @Override
-    public void delete(Integer key) {
+    public int delete(Integer key) {
         try {
             connection = ConnectionFactory.getConnection();
             ps = connection.prepareStatement("DELETE FROM drinks_sold WHERE id = " + key);
-            ps.executeUpdate();
+            return ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Error deleting the sale", e);
         } finally {
@@ -126,8 +132,9 @@ public class SaleDAOImpl implements DAO<Sale, Integer> {
         int paid_by_cash = rs.getInt("paid_by_cash");
         int paid_by_card = rs.getInt("paid_by_card");
         Date date = rs.getDate("date");
+        String clientName = rs.getString("client_name");
 
-        return new Sale(id, name, quantity, total_price, paid_by_cash, paid_by_card, date);
+        return new Sale(id, name, quantity, total_price, paid_by_cash, paid_by_card, date, clientName);
     }
 
     private void closeConnection() {

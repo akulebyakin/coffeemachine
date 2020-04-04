@@ -1,5 +1,8 @@
 package service.impl;
 
+import dao.impl.IngredientDAOImpl;
+import dao.impl.RecipeDAOImpl;
+import dao.impl.SaleDAOImpl;
 import model.Ingredient;
 import model.Recipe;
 import model.Sale;
@@ -10,7 +13,7 @@ import java.util.List;
 public class AdminServiceImpl implements AdminService {
     @Override
     public List<Ingredient> getAllIngredients() {
-        return null;
+        return new IngredientDAOImpl().getAll();
     }
 
     @Override
@@ -20,7 +23,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public List<Recipe> getAllRecipes() {
-        return null;
+        return new RecipeDAOImpl().getAll();
     }
 
     @Override
@@ -35,7 +38,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public List<Sale> getAllSales() {
-        return null;
+        return new SaleDAOImpl().getAll();
     }
 
     @Override
@@ -44,32 +47,33 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public boolean addIngredient(Ingredient ingredient) {
-        return false;
+    public int addIngredient(Ingredient ingredient) {
+        IngredientDAOImpl ingredientDAO = new IngredientDAOImpl();
+        return ingredientDAO.insert(ingredient);
     }
 
     @Override
-    public boolean addRecipe(Recipe recipe) {
-        return false;
+    public int addRecipe(Recipe recipe) {
+        return -1;
     }
 
     @Override
-    public boolean changeIngredientByName(int id, Ingredient ingredient) {
-        return false;
+    public int changeIngredientByName(int id, Ingredient ingredient) {
+        return -1;
     }
 
     @Override
-    public boolean changeRecipeByName(int id, Ingredient ingredient) {
-        return false;
+    public int changeRecipeByName(int id, Ingredient ingredient) {
+        return -1;
     }
 
     @Override
-    public boolean deleteIngredientByName(int id) {
-        return false;
+    public int deleteIngredientByName(int id) {
+        return -1;
     }
 
     @Override
-    public boolean deleteRecipeByName(int id) {
-        return false;
+    public int deleteRecipeByName(int id) {
+        return -1;
     }
 }

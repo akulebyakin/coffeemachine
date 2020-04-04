@@ -17,10 +17,10 @@ public interface AdminService {
     List<Sale> getSalesToday();
 
     // make
-    boolean addIngredient(Ingredient ingredient);
-    boolean addRecipe(Recipe recipe);
-    boolean changeIngredientByName(int id, Ingredient ingredient);
-    boolean changeRecipeByName(int id, Ingredient ingredient);
-    boolean deleteIngredientByName(int id);
-    boolean deleteRecipeByName(int id);
+    int addIngredient(Ingredient ingredient);
+    int addRecipe(Recipe recipe);
+    int changeIngredientByName(int id, Ingredient ingredient);
+    int changeRecipeByName(int id, Ingredient ingredient);
+    int deleteIngredientByName(int id);
+    int deleteRecipeByName(int id);
 }
