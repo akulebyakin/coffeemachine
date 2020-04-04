@@ -19,6 +19,7 @@ public class Recipe {
         this.available = available;
         this.totalSold = total_sold;
     }
+
     public Recipe(String name, String ingredient_ids, String ingredient_amount,
                   int price, boolean available) {
         this.name = name;
@@ -54,6 +55,14 @@ public class Recipe {
 
     public int getTotalSold() {
         return totalSold;
+    }
+
+    public void setTotalSold(int totalSold) {
+        this.totalSold = totalSold;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
     }
 
     //    @Override

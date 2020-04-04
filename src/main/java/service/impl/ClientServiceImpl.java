@@ -9,6 +9,7 @@ import model.Sale;
 import service.ClientService;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ClientServiceImpl implements ClientService {
@@ -36,12 +37,13 @@ public class ClientServiceImpl implements ClientService {
 
         for (Recipe recipe : recipeDAO.getAll()) {
             String compositionItem = recipe.getId() + ". " + recipe.getName() + ":\n";
-            String[] ingredient_ids = recipe.getIngredient_ids().split(",");
-            String[] ingredient_amount = recipe.getIngredient_amount().split(",");
+
+            int[] ingredient_ids = parseSQLArrayToInteger(recipe.getIngredient_ids());
+            int[] ingredient_amount = parseSQLArrayToInteger(recipe.getIngredient_amount());
 
             for (int i = 0; i < ingredient_ids.length; i++) {
-                int id = Integer.parseInt(ingredient_ids[i].replaceAll("\\D", ""));
-                int amount = Integer.parseInt(ingredient_amount[i].replaceAll("\\D", ""));
+                int id = ingredient_ids[i];
+                int amount = ingredient_amount[i];
                 Ingredient ingredient = ingredientDAO.get(id);
                 compositionItem += "\t" + ingredient.getName() +
                         " - " + amount + " " + ingredient.getUnit() + "\n";
@@ -58,18 +60,56 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public int makeCoffee(String coffeeName, String clientName, String payMethod) {
-        SaleDAOImpl saleDAO = new SaleDAOImpl();
-        Recipe recipe = new RecipeDAOImpl().getByParameter("name", coffeeName);
-        Sale sale = new Sale(coffeeName, 1, clientName);
-        int price = recipe.getPrice();
+        try {
+            SaleDAOImpl saleDAO = new SaleDAOImpl();
+            RecipeDAOImpl recipeDAO = new RecipeDAOImpl();
+            IngredientDAOImpl ingredientDAO = new IngredientDAOImpl();
 
-        sale.setTotalPrice(price);
-        if (payMethod.toLowerCase().equals("card")) {
-            sale.setPaidByCard(price);
-        } else {
-            sale.setPaidByCash(price);
+            Recipe recipe = recipeDAO.getByParameter("name", coffeeName);
+            Sale sale = new Sale(coffeeName, 1, clientName);
+            int price = recipe.getPrice();
+
+            // minus consumables
+            int[] ingredient_ids = parseSQLArrayToInteger(recipe.getIngredient_ids());
+            int[] ingredient_amount = parseSQLArrayToInteger(recipe.getIngredient_amount());
+
+            for (int i = 0; i < ingredient_ids.length; i++) {
+                Ingredient ingredient = ingredientDAO.get(ingredient_ids[i]);
+                int newBalance = ingredient.getBalance() - ingredient_amount[i];
+                if (newBalance >= 0) {
+                    ingredient.setBalance(newBalance);
+                    ingredientDAO.update(ingredient.getId(), ingredient);
+                } else {
+                    System.out.println("Sorry! Can't make '" + coffeeName + "', not enough '" + ingredient.getName() + "' ");
+                    recipe.setAvailable(false);
+                    recipeDAO.update(recipe.getId(), recipe);
+                    return -1;
+                }
+            }
+
+            // set paid_by_cash or paid_by_card
+            sale.setTotalPrice(price);
+            if (payMethod.toLowerCase().equals("card")) {
+                sale.setPaidByCard(price);
+            } else {
+                sale.setPaidByCash(price);
+            }
+
+            // total_sold++
+            recipe.setTotalSold(recipe.getTotalSold() + 1);
+            recipeDAO.update(recipe.getId(), recipe);
+
+            return saleDAO.insert(sale);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return -1;
+    }
 
-        return saleDAO.insert(sale);
+    private int[] parseSQLArrayToInteger(String sqlArray) {
+        return Arrays.stream(sqlArray.split(","))
+                .map(n -> n.replaceAll("\\D", ""))
+                .mapToInt(Integer::parseInt)
+                .toArray();
     }
 }

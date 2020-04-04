@@ -12,6 +12,23 @@ public class Sale {
     private Date date;
     private final String clientName;
 
+    public Sale(int id, String name, int quantity, int totalPrice, int paidByCash, int paidByCard, Date date, String clientName) {
+        this.id = id;
+        this.name = name;
+        this.quantity = quantity;
+        this.totalPrice = totalPrice;
+        this.paidByCash = paidByCash;
+        this.paidByCard = paidByCard;
+        this.date = date;
+        this.clientName = clientName;
+    }
+
+    public Sale(String name, int quantity, String clientName) {
+        this.name = name;
+        this.quantity = quantity;
+        this.clientName = clientName;
+    }
+
     public int getId() {
         return id;
     }
@@ -54,23 +71,6 @@ public class Sale {
 
     public void setPaidByCard(int paidByCard) {
         this.paidByCard = paidByCard;
-    }
-
-    public Sale(int id, String name, int quantity, int totalPrice, int paidByCash, int paidByCard, Date date, String clientName) {
-        this.id = id;
-        this.name = name;
-        this.quantity = quantity;
-        this.totalPrice = totalPrice;
-        this.paidByCash = paidByCash;
-        this.paidByCard = paidByCard;
-        this.date = date;
-        this.clientName = clientName;
-    }
-
-    public Sale (String name, int quantity, String clientName) {
-        this.name = name;
-        this.quantity = quantity;
-        this.clientName = clientName;
     }
 
     @Override

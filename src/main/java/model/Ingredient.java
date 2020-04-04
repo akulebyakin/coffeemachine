@@ -36,6 +36,10 @@ public class Ingredient {
         return unit;
     }
 
+    public void setBalance(int balance) {
+        this.balance = balance;
+    }
+
     //    @Override
 //    public String toString() {
 //        return "id:\t" + id + "\n" +
