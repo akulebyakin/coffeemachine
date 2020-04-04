@@ -30,6 +30,7 @@ Choose an action. Available operations:<br>
 * menu - displays the menu <br>
 
 
+
     Operation: menu
     1. Espresso - 105 rub. 
     2. Double espresso - 175 rub. 
