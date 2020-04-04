@@ -49,7 +49,11 @@ get in a certain order, count statistics based on the received data etc.);
     |  2 | Raf        |        1 |         275 |            0 |          275 | 2020-04-04 17:57:26 | Andrey      |
     |  3 | Cappuccino |        1 |         225 |            0 |          225 | 2020-04-04 17:57:53 | Andrey      |
     +----+------------+----------+-------------+--------------+--------------+---------------------+-------------+
-  
+ 
+ #### Code structure <br>
+ 
+ ![code structure](http://joxi.ru/gmvExPdfvKnB8r.png)
+ 
 ---
 
 ### Manual <br>
@@ -80,7 +84,7 @@ If a drink with the name exists, it will be made <br>
     I'm making 'Cappuccino'
     Done! Drinks made: 1
 
-**getDrinkComposition** - displays composition of all drinks.
+**getDrinkComposition** - displays composition of all drinks
 
      Operation: getDrinkComposition
      1. Espresso:
