@@ -1,7 +1,7 @@
 # coffeemachine
 Project for EPAM training
 
-###Task:
+### Task: <br>
 **Coffee machine system.** <br>
 The coffee machine has a set of drinks. Customer can buy one or more drinks.
 
@@ -16,9 +16,9 @@ get in a certain order, count statistics based on the received data etc.);
 7. Observe Java Code Conventions;
 
 ---
-###Project Structure
-MySQL tables
-* ingredients
+### Project Structure <br>
+MySQL tables<br>
+ingredients<br>
 
 
     +----+-----------------+---------+------+
@@ -29,7 +29,7 @@ MySQL tables
     |  3 | Sugar           |     500 | g    |
     +----+-----------------+---------+------+
 
-* recipes
+recipes<br>
 
 
      +----+------------------+--------------------+-------------------------+-------+-----------+------------+
@@ -40,7 +40,7 @@ MySQL tables
      |  3 | Americano        | [1, 2]             | [200, 7]                |   105 |         1 |          0 |
      +----+------------------+--------------------+-------------------------+-------+-----------+------------+
 
-* drinks_sold
+drinks_sold<br>
 
 
     +----+------------+----------+-------------+--------------+--------------+---------------------+-------------+
