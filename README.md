@@ -21,15 +21,11 @@ get in a certain order, count statistics based on the received data etc.);
 
 Introduce yourself! <br>
 
-
     Welcome to the Red Tiger Coffee House! Please tell me your name.
     My name is: Andrey
 
-
 Choose an action. Available operations:<br> 
-* menu - displays the menu <br>
-
-
+**menu** - displays the menu <br>
 
     Operation: menu
     1. Espresso - 105 rub. 
@@ -41,15 +37,32 @@ Choose an action. Available operations:<br>
     7. Moccaccino White - 300 rub. 
     8. Raf - 275 rub. 
     9. Flat White - 250 rub. 
- 
----
 
+**make Cappuccino** - makes Cappuccino. Put any drink name instead of 'Cappuccino'. 
+If a drink with the name exists, it will be made <br>
+
+    Operation: make Cappuccino
+    I'm making 'Cappuccino'
+    Done! Drinks made: 1
+
+**getDrinkComposition** - displays composition of all drinks.
+
+     Operation: getDrinkComposition
+     1. Espresso:
+     	Water - 40 ml
+     	Coffee - 7 g
+     
+     2. Double espresso:
+     	Water - 80 ml
+     	Coffee - 14 g
+     ...
+
+---
 
 ### Project Structure <br>
 #### MySQL tables<br>
 
 **ingredients** - coffee ingredients <br>
-
 
     +----+-----------------+---------+------+
     | id | name            | balance | unit |
@@ -61,7 +74,6 @@ Choose an action. Available operations:<br>
 
 **recipes** - composition of the drink and its cost<br>
 
-
     +----+------------------+--------------------+-------------------------+-------+-----------+------------+
     | id | name             | ingredient_ids     | ingredient_amount       | price | available | total_sold |
     +----+------------------+--------------------+-------------------------+-------+-----------+------------+
@@ -71,7 +83,6 @@ Choose an action. Available operations:<br>
     +----+------------------+--------------------+-------------------------+-------+-----------+------------+
 
 **drinks_sold** - sales information<br>
-
 
     +----+------------+----------+-------------+--------------+--------------+---------------------+-------------+
     | id | name       | quantity | total_price | paid_by_cash | paid_by_card | date                | client_name |
