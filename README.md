@@ -50,7 +50,7 @@ get in a certain order, count statistics based on the received data etc.);
     |  3 | Cappuccino |        1 |         225 |            0 |          225 | 2020-04-04 17:57:53 | Andrey      |
     +----+------------+----------+-------------+--------------+--------------+---------------------+-------------+
  
- #### Code structure <br>
+ #### Code structure (temp)<br>
  
  ![code structure](http://joxi.ru/gmvExPdfvKnB8r.png)
  
