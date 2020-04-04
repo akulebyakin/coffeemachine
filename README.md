@@ -18,7 +18,7 @@ get in a certain order, count statistics based on the received data etc.);
 ---
 ### Project Structure <br>
 **MySQL tables**<br>
-* ingredients<br>
+ingredients<br>
 
 
     +----+-----------------+---------+------+
@@ -29,7 +29,7 @@ get in a certain order, count statistics based on the received data etc.);
     |  3 | Sugar           |     500 | g    |
     +----+-----------------+---------+------+
 
-* recipes<br>
+recipes<br>
 
 
      +----+------------------+--------------------+-------------------------+-------+-----------+------------+
@@ -40,7 +40,7 @@ get in a certain order, count statistics based on the received data etc.);
      |  3 | Americano        | [1, 2]             | [200, 7]                |   105 |         1 |          0 |
      +----+------------------+--------------------+-------------------------+-------+-----------+------------+
 
-* drinks_sold<br>
+drinks_sold<br>
 
 
     +----+------------+----------+-------------+--------------+--------------+---------------------+-------------+
