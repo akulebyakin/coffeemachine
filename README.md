@@ -17,6 +17,33 @@ get in a certain order, count statistics based on the received data etc.);
 
 ---
 
+### Manual <br>
+
+Introduce yourself! <br>
+
+
+    Welcome to the Red Tiger Coffee House! Please tell me your name.
+    My name is: Andrey
+
+
+Choose an action. Available operations:<br> 
+* menu - displays the menu <br>
+
+
+    Operation: menu
+    1. Espresso - 105 rub. 
+    2. Double espresso - 175 rub. 
+    3. Americano - 105 rub. 
+    4. Cappuccino - 225 rub. 
+    5. Latte - 225 rub. 
+    6. Moccaccino Dark - 300 rub. Not available!
+    7. Moccaccino White - 300 rub. 
+    8. Raf - 275 rub. 
+    9. Flat White - 250 rub. 
+ 
+---
+
+
 ### Project Structure <br>
 #### MySQL tables<br>
 

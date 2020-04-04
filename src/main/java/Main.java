@@ -14,7 +14,7 @@ public class Main {
         ClientService clientService = new ClientServiceImpl();
         AdminService adminService = new AdminServiceImpl();
 
-        System.out.println("Welcome to the Red Tiger Coffee House! Please tell us your name.");
+        System.out.println("Welcome to the Red Tiger Coffee House! Please tell me your name.");
         System.out.print("My name is: ");
 
         Scanner scanner = new Scanner(System.in);
