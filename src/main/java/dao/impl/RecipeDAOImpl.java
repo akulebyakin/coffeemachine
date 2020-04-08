@@ -13,8 +13,12 @@ public class RecipeDAOImpl implements DAO<Recipe, Integer> {
     private PreparedStatement ps = null;
     private ResultSet rs = null;
 
+    public RecipeDAOImpl() throws SQLException {
+        connection = ConnectionFactory.getConnection();
+    }
+
     @Override
-    public int insert(Recipe recipe) {
+    public int insert(Recipe recipe) throws SQLException {
         try {
             connection = ConnectionFactory.getConnection();
             ps = connection.prepareStatement("INSERT INTO recipes " +
@@ -26,15 +30,13 @@ public class RecipeDAOImpl implements DAO<Recipe, Integer> {
             ps.setBoolean(5, recipe.isAvailable());
             ps.setInt(6, recipe.getTotalSold());
             return ps.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error inserting the recipe", e);
         } finally {
-            closeConnection();
+            if (ps != null) ps.close();
         }
     }
 
     @Override
-    public Recipe get(Integer key) {
+    public Recipe get(Integer key) throws SQLException {
         try {
             connection = ConnectionFactory.getConnection();
             ps = connection.prepareStatement("SELECT * FROM recipes WHERE id = " + key);
@@ -42,16 +44,15 @@ public class RecipeDAOImpl implements DAO<Recipe, Integer> {
             if (rs.next()) {
                 return getRecipeFromResultSet(rs);
             }
-        } catch (SQLException e) {
-            throw new RuntimeException("Error getting the recipe", e);
         } finally {
-            closeConnection();
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
         }
         return null;
     }
 
     @Override
-    public Recipe getByParameter(String parameter, String value) {
+    public Recipe getByParameter(String parameter, String value) throws SQLException {
         try {
             connection = ConnectionFactory.getConnection();
             ps = connection.prepareStatement("SELECT * FROM recipes WHERE " + parameter + " = ?");
@@ -60,16 +61,15 @@ public class RecipeDAOImpl implements DAO<Recipe, Integer> {
             if (rs.next()) {
                 return getRecipeFromResultSet(rs);
             }
-        } catch (SQLException e) {
-            throw new RuntimeException("Error getting the recipe by parameter " + parameter, e);
         } finally {
-            closeConnection();
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
         }
         return null;
     }
 
     @Override
-    public List<Recipe> getAll() {
+    public List<Recipe> getAll() throws SQLException {
         List<Recipe> list = new ArrayList<>();
         try {
             connection = ConnectionFactory.getConnection();
@@ -78,16 +78,15 @@ public class RecipeDAOImpl implements DAO<Recipe, Integer> {
             while (rs.next()) {
                 list.add(getRecipeFromResultSet(rs));
             }
-        } catch (SQLException e) {
-            throw new RuntimeException("Error getting all recipes", e);
         } finally {
-            closeConnection();
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
         }
         return list;
     }
 
     @Override
-    public int update(Integer key, Recipe recipe) {
+    public int update(Integer key, Recipe recipe) throws SQLException {
         try {
             connection = ConnectionFactory.getConnection();
             ps = connection.prepareStatement("UPDATE recipes SET name=?, ingredient_ids=?, ingredient_amount=?," +
@@ -99,23 +98,19 @@ public class RecipeDAOImpl implements DAO<Recipe, Integer> {
             ps.setBoolean(5, recipe.isAvailable());
             ps.setInt(6, recipe.getTotalSold());
             return ps.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error updating the recipe", e);
         } finally {
-            closeConnection();
+            if (ps != null) ps.close();
         }
     }
 
     @Override
-    public int delete(Integer key) {
+    public int delete(Integer key) throws SQLException {
         try {
             connection = ConnectionFactory.getConnection();
             ps = connection.prepareStatement("DELETE FROM recipes WHERE id = " + key);
             return ps.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error deleting the ingredient", e);
         } finally {
-            closeConnection();
+            if (ps != null) ps.close();
         }
     }
 
@@ -131,21 +126,4 @@ public class RecipeDAOImpl implements DAO<Recipe, Integer> {
         return new Recipe(id, name, ingredient_ids, ingredient_amount, price, available, total_sold);
     }
 
-    private void closeConnection() {
-        try {
-            if (rs != null) rs.close();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error closing result set", e);
-        }
-        try {
-            if (ps != null) ps.close();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error closing prepared statement", e);
-        }
-        try {
-            if (connection != null) connection.close();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error closing connection", e);
-        }
-    }
 }

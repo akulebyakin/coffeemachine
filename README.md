@@ -9,7 +9,7 @@ The coffee machine has a set of drinks. Customer can buy one or more drinks.
 1. Create a database (MySQL, MS SQL, SQLite, PostgreSQL etc.);
 2. Organize access to the database from the application using JDBC and the DAO design pattern;
 3. Implement necessary services that will use the data from the DB (get, get by parameter, 
-get in a certain order, count statistics based on the received data etc.);
+get in a certain order, get statistics based on the received data etc.);
 4. Implement the output of the result of the service layer to the console;
 5. Make JUnit tests for the service layer;
 6. Classes and interfaces must be well organized by packages;
@@ -30,7 +30,7 @@ get in a certain order, count statistics based on the received data etc.);
     |  3 | Sugar           |     500 | g    |
     +----+-----------------+---------+------+
 
-**recipes** - composition of the drink and its cost<br>
+**recipes** - composition of each drink and its price <br>
 
     +----+------------------+--------------------+-------------------------+-------+-----------+------------+
     | id | name             | ingredient_ids     | ingredient_amount       | price | available | total_sold |
@@ -40,7 +40,7 @@ get in a certain order, count statistics based on the received data etc.);
     |  3 | Americano        | [1, 2]             | [200, 7]                |   105 |         1 |          0 |
     +----+------------------+--------------------+-------------------------+-------+-----------+------------+
 
-**drinks_sold** - sales information<br>
+**drinks_sold** - sales information <br>
 
     +----+------------+----------+-------------+--------------+--------------+---------------------+-------------+
     | id | name       | quantity | total_price | paid_by_cash | paid_by_card | date                | client_name |

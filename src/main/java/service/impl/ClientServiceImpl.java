@@ -8,6 +8,7 @@ import model.Recipe;
 import model.Sale;
 import service.ClientService;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -17,9 +18,13 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public List<String> getMenu() {
         List<String> menu = new ArrayList<>();
-        for (Recipe recipe : new RecipeDAOImpl().getAll()) {
-            menu.add(recipe.getId() + ". " + recipe.getName() + " - " + recipe.getPrice() + " rub. " +
-                    (recipe.isAvailable() ? "" : "Not available!"));
+        try {
+            for (Recipe recipe : new RecipeDAOImpl().getAll()) {
+                menu.add(recipe.getId() + ". " + recipe.getName() + " - " + recipe.getPrice() + " rub. " +
+                        (recipe.isAvailable() ? "" : "Not available!"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return menu;
     }
@@ -32,23 +37,27 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public List<String> getDrinkComposition() {
         List<String> drinkCompositionList = new ArrayList<>();
-        RecipeDAOImpl recipeDAO = new RecipeDAOImpl();
-        IngredientDAOImpl ingredientDAO = new IngredientDAOImpl();
+        try {
+            RecipeDAOImpl recipeDAO = new RecipeDAOImpl();
+            IngredientDAOImpl ingredientDAO = new IngredientDAOImpl();
 
-        for (Recipe recipe : recipeDAO.getAll()) {
-            String compositionItem = recipe.getId() + ". " + recipe.getName() + ":\n";
+            for (Recipe recipe : recipeDAO.getAll()) {
+                String compositionItem = recipe.getId() + ". " + recipe.getName() + ":\n";
 
-            int[] ingredient_ids = parseSQLArrayToInteger(recipe.getIngredient_ids());
-            int[] ingredient_amount = parseSQLArrayToInteger(recipe.getIngredient_amount());
+                int[] ingredient_ids = parseSQLArrayToInteger(recipe.getIngredient_ids());
+                int[] ingredient_amount = parseSQLArrayToInteger(recipe.getIngredient_amount());
 
-            for (int i = 0; i < ingredient_ids.length; i++) {
-                int id = ingredient_ids[i];
-                int amount = ingredient_amount[i];
-                Ingredient ingredient = ingredientDAO.get(id);
-                compositionItem += "\t" + ingredient.getName() +
-                        " - " + amount + " " + ingredient.getUnit() + "\n";
+                for (int i = 0; i < ingredient_ids.length; i++) {
+                    int id = ingredient_ids[i];
+                    int amount = ingredient_amount[i];
+                    Ingredient ingredient = ingredientDAO.get(id);
+                    compositionItem += "\t" + ingredient.getName() +
+                            " - " + amount + " " + ingredient.getUnit() + "\n";
+                }
+                drinkCompositionList.add(compositionItem);
             }
-            drinkCompositionList.add(compositionItem);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return drinkCompositionList;
     }
@@ -100,6 +109,8 @@ public class ClientServiceImpl implements ClientService {
             recipeDAO.update(recipe.getId(), recipe);
 
             return saleDAO.insert(sale);
+        } catch (SQLException e) {
+            e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }

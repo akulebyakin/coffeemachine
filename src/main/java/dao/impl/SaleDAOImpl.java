@@ -13,14 +13,17 @@ import java.util.List;
 
 // id	name	quantity	total_price	paid_by_cash	paid_by_card	date    client_name
 public class SaleDAOImpl implements DAO<Sale, Integer> {
-    private Connection connection = null;
+    private Connection connection;
     private PreparedStatement ps = null;
     private ResultSet rs = null;
 
+    public SaleDAOImpl() throws SQLException {
+        connection = ConnectionFactory.getConnection();
+    }
+
     @Override
-    public int insert(Sale sale) {
+    public int insert(Sale sale) throws SQLException {
         try {
-            connection = ConnectionFactory.getConnection();
             ps = connection.prepareStatement("INSERT INTO drinks_sold " +
                     "VALUES (DEFAULT, ?, ?, ?, ?, ?, DEFAULT, ?)");
             ps.setString(1, sale.getName());
@@ -31,70 +34,61 @@ public class SaleDAOImpl implements DAO<Sale, Integer> {
 //            ps.setDate(6, sale.getDate());
             ps.setString(6, sale.getClientName());
             return ps.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error inserting the sale", e);
-        } finally {
-            closeConnection();
+        }finally {
+            if (ps != null) ps.close();
         }
     }
 
     @Override
-    public Sale get(Integer key) {
+    public Sale get(Integer key) throws SQLException {
         try {
-            connection = ConnectionFactory.getConnection();
             ps = connection.prepareStatement("SELECT * FROM drinks_sold WHERE id = " + key);
             rs = ps.executeQuery();
             if (rs.next()) {
                 return getSaleFromResultSet(rs);
             }
-        } catch (SQLException e) {
-            throw new RuntimeException("Error getting the sale", e);
         } finally {
-            closeConnection();
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
         }
         return null;
     }
 
     @Override
-    public Sale getByParameter(String parameter, String value) {
+    public Sale getByParameter(String parameter, String value) throws SQLException {
         try {
-            connection = ConnectionFactory.getConnection();
             ps = connection.prepareStatement("SELECT * FROM drinks_sold WHERE " + parameter + " = ?");
             ps.setString(1, value);
             rs = ps.executeQuery();
             if (rs.next()) {
                 return getSaleFromResultSet(rs);
             }
-        } catch (SQLException e) {
-            throw new RuntimeException("Error getting the sale by parameter " + parameter, e);
         } finally {
-            closeConnection();
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
         }
         return null;
     }
 
     @Override
-    public List<Sale> getAll() {
+    public List<Sale> getAll() throws SQLException {
         List<Sale> list = new ArrayList<>();
         try {
-            connection = ConnectionFactory.getConnection();
             ps = connection.prepareStatement("SELECT * FROM drinks_sold");
             rs = ps.executeQuery();
             while (rs.next()) {
                 list.add(getSaleFromResultSet(rs));
             }
-        } catch (SQLException e) {
-            throw new RuntimeException("Error getting all sales", e);
         } finally {
-            closeConnection();
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
         }
         return list;
     }
 
     @Override
-    public int update(Integer key, Sale sale) {
+    public int update(Integer key, Sale sale) throws SQLException {
         try {
-            connection = ConnectionFactory.getConnection();
             ps = connection.prepareStatement("UPDATE drinks_sold SET name=?, quantity=?, total_price=?," +
                     " paid_by_cash=?, paid_by_card=?, date=?, client_name=? WHERE id = " + key);
             ps.setString(1, sale.getName());
@@ -105,23 +99,18 @@ public class SaleDAOImpl implements DAO<Sale, Integer> {
             ps.setDate(6, sale.getDate());
             ps.setString(7, sale.getClientName());
             return ps.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error updating the sale", e);
         } finally {
-            closeConnection();
+            if (ps != null) ps.close();
         }
     }
 
     @Override
-    public int delete(Integer key) {
+    public int delete(Integer key) throws SQLException {
         try {
-            connection = ConnectionFactory.getConnection();
             ps = connection.prepareStatement("DELETE FROM drinks_sold WHERE id = " + key);
             return ps.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error deleting the sale", e);
         } finally {
-            closeConnection();
+            if (ps != null) ps.close();
         }
     }
 
@@ -136,23 +125,5 @@ public class SaleDAOImpl implements DAO<Sale, Integer> {
         String clientName = rs.getString("client_name");
 
         return new Sale(id, name, quantity, total_price, paid_by_cash, paid_by_card, date, clientName);
-    }
-
-    private void closeConnection() {
-        try {
-            if (rs != null) rs.close();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error closing result set", e);
-        }
-        try {
-            if (ps != null) ps.close();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error closing prepared statement", e);
-        }
-        try {
-            if (connection != null) connection.close();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error closing connection", e);
-        }
     }
 }

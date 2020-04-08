@@ -8,12 +8,20 @@ import model.Recipe;
 import model.Sale;
 import service.AdminService;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AdminServiceImpl implements AdminService {
     @Override
     public List<Ingredient> getAllIngredients() {
-        return new IngredientDAOImpl().getAll();
+        List<Ingredient> allIngredients = new ArrayList<>();
+        try {
+            allIngredients = new IngredientDAOImpl().getAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return allIngredients;
     }
 
     @Override
@@ -23,7 +31,13 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public List<Recipe> getAllRecipes() {
-        return new RecipeDAOImpl().getAll();
+        List<Recipe> recipes = new ArrayList<>();
+        try {
+            recipes = new RecipeDAOImpl().getAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return recipes;
     }
 
     @Override
@@ -38,7 +52,13 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public List<Sale> getAllSales() {
-        return new SaleDAOImpl().getAll();
+        List<Sale> sales = new ArrayList<>();
+        try {
+            sales = new SaleDAOImpl().getAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return sales;
     }
 
     @Override
@@ -48,8 +68,12 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public int addIngredient(Ingredient ingredient) {
-        IngredientDAOImpl ingredientDAO = new IngredientDAOImpl();
-        return ingredientDAO.insert(ingredient);
+        try {
+            return new IngredientDAOImpl().insert(ingredient);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 
     @Override

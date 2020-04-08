@@ -16,12 +16,12 @@ public class IngredientDAOImpl implements DAO<Ingredient, Integer> {
     private PreparedStatement ps = null;
     private ResultSet rs = null;
 
-//    public IngredientDAOImpl() throws SQLException {
-//        connection = ConnectionFactory.getConnection();
-//    }
+    public IngredientDAOImpl() throws SQLException {
+        connection = ConnectionFactory.getConnection();
+    }
 
     @Override
-    public int insert(Ingredient ingredient) {
+    public int insert(Ingredient ingredient) throws SQLException {
         try {
             connection = ConnectionFactory.getConnection();
             ps = connection.prepareStatement("INSERT INTO  ingredients VALUES (DEFAULT, ?, ?, ?)");
@@ -29,15 +29,13 @@ public class IngredientDAOImpl implements DAO<Ingredient, Integer> {
             ps.setInt(2, ingredient.getBalance());
             ps.setString(3, ingredient.getUnit());
             return ps.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error inserting the ingredient", e);
         } finally {
-            closeConnection();
+            if (ps != null) ps.close();
         }
     }
 
     @Override
-    public Ingredient get(Integer key) {
+    public Ingredient get(Integer key) throws SQLException {
         try {
             connection = ConnectionFactory.getConnection();
             ps = connection.prepareStatement("SELECT * FROM ingredients WHERE id = " + key);
@@ -45,16 +43,15 @@ public class IngredientDAOImpl implements DAO<Ingredient, Integer> {
             if (rs.next()) {
                 return getIngredientFromResultSet(rs);
             }
-        } catch (SQLException e) {
-            throw new RuntimeException("Error getting the ingredient", e);
         } finally {
-            closeConnection();
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
         }
         return null;
     }
 
     @Override
-    public Ingredient getByParameter(String parameter, String value) {
+    public Ingredient getByParameter(String parameter, String value) throws SQLException {
         try {
             connection = ConnectionFactory.getConnection();
             ps = connection.prepareStatement("SELECT * FROM ingredients WHERE " + parameter + " = ?");
@@ -63,16 +60,15 @@ public class IngredientDAOImpl implements DAO<Ingredient, Integer> {
             if (rs.next()) {
                 return getIngredientFromResultSet(rs);
             }
-        } catch (SQLException e) {
-            throw new RuntimeException("Error getting the ingredient by parameter " + parameter, e);
         } finally {
-            closeConnection();
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
         }
         return null;
     }
 
     @Override
-    public List<Ingredient> getAll() {
+    public List<Ingredient> getAll() throws SQLException {
         List<Ingredient> list = new ArrayList<>();
         try {
             connection = ConnectionFactory.getConnection();
@@ -81,16 +77,15 @@ public class IngredientDAOImpl implements DAO<Ingredient, Integer> {
             while (rs.next()) {
                 list.add(getIngredientFromResultSet(rs));
             }
-        } catch (SQLException e) {
-            throw new RuntimeException("Error getting all ingredients", e);
         } finally {
-            closeConnection();
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
         }
         return list;
     }
 
     @Override
-    public int update(Integer key, Ingredient ingredient) {
+    public int update(Integer key, Ingredient ingredient) throws SQLException {
         try {
             connection = ConnectionFactory.getConnection();
             ps = connection.prepareStatement("UPDATE ingredients SET name=?, balance=?, unit=? WHERE id = " + key);
@@ -98,23 +93,19 @@ public class IngredientDAOImpl implements DAO<Ingredient, Integer> {
             ps.setInt(2, ingredient.getBalance());
             ps.setString(3, ingredient.getUnit());
             return ps.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error updating the ingredient", e);
         } finally {
-            closeConnection();
+            if (ps != null) ps.close();
         }
     }
 
     @Override
-    public int delete(Integer key) {
+    public int delete(Integer key) throws SQLException {
         try {
             connection = ConnectionFactory.getConnection();
             ps = connection.prepareStatement("DELETE FROM ingredients WHERE id = " + key);
             return ps.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error deleting the ingredient", e);
         } finally {
-            closeConnection();
+            if (ps != null) ps.close();
         }
     }
 
@@ -127,21 +118,4 @@ public class IngredientDAOImpl implements DAO<Ingredient, Integer> {
         return new Ingredient(id, name, balance, unit);
     }
 
-    private void closeConnection() {
-        try {
-            if (rs != null) rs.close();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error closing result set", e);
-        }
-        try {
-            if (ps != null) ps.close();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error closing prepared statement", e);
-        }
-        try {
-            if (connection != null) connection.close();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error closing connection", e);
-        }
-    }
 }
