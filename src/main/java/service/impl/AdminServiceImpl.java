@@ -1,5 +1,6 @@
 package service.impl;
 
+import dao.impl.DrinkCompositionDAOImpl;
 import dao.impl.IngredientDAOImpl;
 import dao.impl.RecipeDAOImpl;
 import dao.impl.SaleDAOImpl;
@@ -13,11 +14,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AdminServiceImpl implements AdminService {
+    private IngredientDAOImpl ingredientDAO;
+    private RecipeDAOImpl recipeDAO;
+    private DrinkCompositionDAOImpl drinkCompositionDAO;
+    private SaleDAOImpl saleDAO;
+
+    public AdminServiceImpl() throws SQLException {
+        ingredientDAO = new IngredientDAOImpl();
+        recipeDAO = new RecipeDAOImpl();
+        drinkCompositionDAO = new DrinkCompositionDAOImpl();
+        saleDAO = new SaleDAOImpl();
+    }
+
     @Override
     public List<Ingredient> getAllIngredients() {
         List<Ingredient> allIngredients = new ArrayList<>();
         try {
-            allIngredients = new IngredientDAOImpl().getAll();
+            allIngredients = ingredientDAO.getAll();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -33,7 +46,7 @@ public class AdminServiceImpl implements AdminService {
     public List<Recipe> getAllRecipes() {
         List<Recipe> recipes = new ArrayList<>();
         try {
-            recipes = new RecipeDAOImpl().getAll();
+            recipes = recipeDAO.getAll();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -54,7 +67,7 @@ public class AdminServiceImpl implements AdminService {
     public List<Sale> getAllSales() {
         List<Sale> sales = new ArrayList<>();
         try {
-            sales = new SaleDAOImpl().getAll();
+            sales = saleDAO.getAll();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -69,7 +82,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public int addIngredient(Ingredient ingredient) {
         try {
-            return new IngredientDAOImpl().insert(ingredient);
+            return ingredientDAO.insert(ingredient);
         } catch (SQLException e) {
             e.printStackTrace();
         }

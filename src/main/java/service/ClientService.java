@@ -7,6 +7,7 @@ public interface ClientService {
     List<String> getMenu();
     List<String> getAllDrinkCompositions();
     List<String> getMostPopularDrinks();
+    int getPrice(String drinkName);
 
     // make
     int makeCoffee(String coffeeName, String clientName, String payMethod);

@@ -34,8 +34,16 @@ public class Main {
                 operation = scanner.nextLine();
                 if (operation.matches("make .+")) {
                     String coffeeName = operation.substring(4).trim();
+                    int price = clientService.getPrice(coffeeName);
+                    if (price == -1) {
+                        System.out.println("There is no drink with this name.");
+                        continue;
+                    }
+                    System.out.println("Price is: " + price + " rub. Will you pay by card or cash?");
+                    System.out.print("Pay method (cash/card): ");
+                    String payMethod = scanner.nextLine();
                     System.out.println("I'm making '" + coffeeName + "'");
-                    int i = clientService.makeCoffee(coffeeName, userName, "cash");
+                    int i = clientService.makeCoffee(coffeeName, userName, payMethod);
                     if (i == 1) {
                         System.out.println("Done! Drinks made: " + i);
                     } else {

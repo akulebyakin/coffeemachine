@@ -3,9 +3,11 @@ package service.impl;
 import dao.impl.DrinkCompositionDAOImpl;
 import dao.impl.IngredientDAOImpl;
 import dao.impl.RecipeDAOImpl;
+import dao.impl.SaleDAOImpl;
 import model.DrinkComposition;
 import model.Ingredient;
 import model.Recipe;
+import model.Sale;
 import service.ClientService;
 
 import java.sql.SQLException;
@@ -13,12 +15,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ClientServiceImpl implements ClientService {
+    private IngredientDAOImpl ingredientDAO;
+    private RecipeDAOImpl recipeDAO;
+    private DrinkCompositionDAOImpl drinkCompositionDAO;
+    private SaleDAOImpl saleDAO;
+
+    public ClientServiceImpl() throws SQLException {
+        ingredientDAO = new IngredientDAOImpl();
+        recipeDAO = new RecipeDAOImpl();
+        drinkCompositionDAO = new DrinkCompositionDAOImpl();
+        saleDAO = new SaleDAOImpl();
+    }
+
     // output example: "1. Espresso - 105 rub."
     @Override
     public List<String> getMenu() {
         List<String> menu = new ArrayList<>();
         try {
-            for (Recipe recipe : new RecipeDAOImpl().getAll()) {
+            for (Recipe recipe : recipeDAO.getAll()) {
                 menu.add(recipe.getId() + ". " + recipe.getName() + " - " + recipe.getPrice() + " rub. " +
                         (recipe.isAvailable() ? "" : "Not available!"));
             }
@@ -37,10 +51,6 @@ public class ClientServiceImpl implements ClientService {
     public List<String> getAllDrinkCompositions() {
         List<String> listResult = new ArrayList<>();
         try {
-            DrinkCompositionDAOImpl drinkCompositionDAO = new DrinkCompositionDAOImpl();
-            RecipeDAOImpl recipeDAO = new RecipeDAOImpl();
-            IngredientDAOImpl ingredientDAO = new IngredientDAOImpl();
-
             for (Recipe recipe : recipeDAO.getAll()) {
                 String compositionItem = recipe.getId() + ". " + recipe.getName() + ":";
 
@@ -69,51 +79,75 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public int makeCoffee(String coffeeName, String clientName, String payMethod) {
-//        try {
-//            SaleDAOImpl saleDAO = new SaleDAOImpl();
-//            RecipeDAOImpl recipeDAO = new RecipeDAOImpl();
-//            IngredientDAOImpl ingredientDAO = new IngredientDAOImpl();
-//
-//            Recipe recipe = recipeDAO.getByParameter("name", coffeeName);
-//            Sale sale = new Sale(coffeeName, 1, clientName);
-//            int price = recipe.getPrice();
-//
-//            // minus consumables
-//            int[] ingredient_ids = parseSQLArrayToInteger(recipe.getIngredient_ids());
-//            int[] ingredient_amount = parseSQLArrayToInteger(recipe.getIngredient_amount());
-//
-//            for (int i = 0; i < ingredient_ids.length; i++) {
-//                Ingredient ingredient = ingredientDAO.get(ingredient_ids[i]);
-//                int newBalance = ingredient.getBalance() - ingredient_amount[i];
-//                if (newBalance >= 0) {
-//                    ingredient.setBalance(newBalance);
-//                    ingredientDAO.update(ingredient.getId(), ingredient);
-//                } else {
-//                    System.out.println("Sorry! Can't make '" + coffeeName + "', not enough '" + ingredient.getName() + "' ");
-//                    recipe.setAvailable(false);
-//                    recipeDAO.update(recipe.getId(), recipe);
-//                    return -1;
-//                }
-//            }
-//
-//            // set paid_by_cash or paid_by_card
-//            sale.setTotalPrice(price);
-//            if (payMethod.toLowerCase().equals("card")) {
-//                sale.setPaidByCard(price);
-//            } else {
-//                sale.setPaidByCash(price);
-//            }
-//
-//            // total_sold++
-//            recipe.setTotalSold(recipe.getTotalSold() + 1);
-//            recipeDAO.update(recipe.getId(), recipe);
-//
-//            return saleDAO.insert(sale);
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        try {
+            // we have only one recipe with unique name
+            Recipe recipe = recipeDAO.getByParameter("name", coffeeName).get(0);
+            List<DrinkComposition> drinkCompositionList = drinkCompositionDAO
+                    .getByParameter("recipe_id", String.valueOf(recipe.getId()));
+
+            // check if its enough consumables on warehouse
+            List<Ingredient> ingredientList = new ArrayList<>();
+            String needMoreGold = "Need more gold! I mean not enough consumables: ";
+            boolean notEnoughGold = false;
+            for (DrinkComposition drinkComposition : drinkCompositionList) {
+                int ingredient_id = drinkComposition.getIngredientId();
+                Ingredient ingredient = ingredientDAO.get(ingredient_id);
+                if (ingredient.getBalance() < drinkComposition.getAmount()) {
+                    notEnoughGold = true;
+                    needMoreGold += ingredient.getName();
+                }
+                ingredientList.add(ingredient);
+            }
+            if (notEnoughGold) {
+                recipe.setAvailable(false);
+                recipeDAO.update(recipe.getId(), recipe);
+                System.out.println(needMoreGold);
+                return -1;
+            } else {
+                recipe.setAvailable(true);
+                recipeDAO.update(recipe.getId(), recipe);
+            }
+
+            // minus consumables
+            for (int i = 0; i < ingredientList.size(); i++) {
+                int newBalance = ingredientList.get(i).getBalance() - drinkCompositionList.get(i).getAmount();
+                ingredientList.get(i).setBalance(newBalance);
+                ingredientDAO.update(ingredientList.get(i).getId(), ingredientList.get(i));
+            }
+
+            // set paid_by_cash or paid_by_card
+            Sale sale = new Sale(coffeeName, 1, clientName);
+            int price = recipe.getPrice();
+            sale.setTotalPrice(price);
+            if (payMethod.toLowerCase().equals("card")) {
+                sale.setPaidByCard(price);
+            } else {
+                sale.setPaidByCash(price);
+            }
+
+            // total_sold++
+            recipe.setTotalSold(recipe.getTotalSold() + 1);
+            recipeDAO.update(recipe.getId(), recipe);
+
+            return saleDAO.insert(sale);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return -1;
+    }
+
+    @Override
+    public int getPrice(String drinkName) {
+        try {
+            return recipeDAO.getByParameter("name", drinkName).get(0).getPrice();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return -1;
     }
 }
