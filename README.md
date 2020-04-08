@@ -84,7 +84,7 @@ If a drink with the name exists, it will be made <br>
     I'm making 'Cappuccino'
     Done! Drinks made: 1
 
-**getDrinkComposition** - displays composition of all drinks
+**getAllDrinkCompositions** - displays composition of all drinks
 
      Operation: getDrinkComposition
      1. Espresso:

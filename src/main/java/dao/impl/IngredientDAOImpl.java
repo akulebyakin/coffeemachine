@@ -12,7 +12,7 @@ import java.util.List;
 
 //  Ingredients columns: id, name, balance, unit
 public class IngredientDAOImpl implements DAO<Ingredient, Integer> {
-    private Connection connection = null;
+    private Connection connection;
     private PreparedStatement ps = null;
     private ResultSet rs = null;
 
@@ -23,7 +23,6 @@ public class IngredientDAOImpl implements DAO<Ingredient, Integer> {
     @Override
     public int insert(Ingredient ingredient) throws SQLException {
         try {
-            connection = ConnectionFactory.getConnection();
             ps = connection.prepareStatement("INSERT INTO  ingredients VALUES (DEFAULT, ?, ?, ?)");
             ps.setString(1, ingredient.getName());
             ps.setInt(2, ingredient.getBalance());
@@ -37,7 +36,6 @@ public class IngredientDAOImpl implements DAO<Ingredient, Integer> {
     @Override
     public Ingredient get(Integer key) throws SQLException {
         try {
-            connection = ConnectionFactory.getConnection();
             ps = connection.prepareStatement("SELECT * FROM ingredients WHERE id = " + key);
             rs = ps.executeQuery();
             if (rs.next()) {
@@ -54,7 +52,6 @@ public class IngredientDAOImpl implements DAO<Ingredient, Integer> {
     public List<Ingredient> getByParameter(String parameter, String value) throws SQLException {
         List<Ingredient> list = new ArrayList<>();
         try {
-            connection = ConnectionFactory.getConnection();
             ps = connection.prepareStatement("SELECT * FROM ingredients WHERE " + parameter + " = ?");
             ps.setString(1, value);
             rs = ps.executeQuery();
@@ -72,7 +69,6 @@ public class IngredientDAOImpl implements DAO<Ingredient, Integer> {
     public List<Ingredient> getAll() throws SQLException {
         List<Ingredient> list = new ArrayList<>();
         try {
-            connection = ConnectionFactory.getConnection();
             ps = connection.prepareStatement("SELECT * FROM ingredients");
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -88,7 +84,6 @@ public class IngredientDAOImpl implements DAO<Ingredient, Integer> {
     @Override
     public int update(Integer key, Ingredient ingredient) throws SQLException {
         try {
-            connection = ConnectionFactory.getConnection();
             ps = connection.prepareStatement("UPDATE ingredients SET name=?, balance=?, unit=? WHERE id = " + key);
             ps.setString(1, ingredient.getName());
             ps.setInt(2, ingredient.getBalance());
@@ -102,7 +97,6 @@ public class IngredientDAOImpl implements DAO<Ingredient, Integer> {
     @Override
     public int delete(Integer key) throws SQLException {
         try {
-            connection = ConnectionFactory.getConnection();
             ps = connection.prepareStatement("DELETE FROM ingredients WHERE id = " + key);
             return ps.executeUpdate();
         } finally {

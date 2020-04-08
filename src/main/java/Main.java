@@ -48,8 +48,8 @@ public class Main {
                         Printer.printList(clientService.getMenu());
                         break;
                     }
-                    case "getDrinkComposition": {
-                        Printer.printList(clientService.getDrinkComposition());
+                    case "getAllDrinkCompositions": {
+                        Printer.printList(clientService.getAllDrinkCompositions());
                         break;
                     }
                     case "getAllRecipes": {
