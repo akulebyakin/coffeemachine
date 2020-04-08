@@ -117,10 +117,10 @@ public class ClientServiceImpl implements ClientService {
         return -1;
     }
 
-    private int[] parseSQLArrayToInteger(String sqlArray) {
-        return Arrays.stream(sqlArray.split(","))
-                .map(n -> n.replaceAll("\\D", ""))
-                .mapToInt(Integer::parseInt)
-                .toArray();
-    }
+//    private int[] parseSQLArrayToInteger(String sqlArray) {
+//        return Arrays.stream(sqlArray.split(","))
+//                .map(n -> n.replaceAll("\\D", ""))
+//                .mapToInt(Integer::parseInt)
+//                .toArray();
+//    }
 }

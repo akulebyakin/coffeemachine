@@ -51,20 +51,21 @@ public class IngredientDAOImpl implements DAO<Ingredient, Integer> {
     }
 
     @Override
-    public Ingredient getByParameter(String parameter, String value) throws SQLException {
+    public List<Ingredient> getByParameter(String parameter, String value) throws SQLException {
+        List<Ingredient> list = new ArrayList<>();
         try {
             connection = ConnectionFactory.getConnection();
             ps = connection.prepareStatement("SELECT * FROM ingredients WHERE " + parameter + " = ?");
             ps.setString(1, value);
             rs = ps.executeQuery();
-            if (rs.next()) {
-                return getIngredientFromResultSet(rs);
+            while (rs.next()) {
+                list.add(getIngredientFromResultSet(rs));
             }
         } finally {
             if (rs != null) rs.close();
             if (ps != null) ps.close();
         }
-        return null;
+        return list;
     }
 
     @Override

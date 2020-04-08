@@ -55,19 +55,20 @@ public class SaleDAOImpl implements DAO<Sale, Integer> {
     }
 
     @Override
-    public Sale getByParameter(String parameter, String value) throws SQLException {
+    public List<Sale> getByParameter(String parameter, String value) throws SQLException {
+        List<Sale> list = new ArrayList<>();
         try {
             ps = connection.prepareStatement("SELECT * FROM drinks_sold WHERE " + parameter + " = ?");
             ps.setString(1, value);
             rs = ps.executeQuery();
-            if (rs.next()) {
-                return getSaleFromResultSet(rs);
+            while (rs.next()) {
+                list.add(getSaleFromResultSet(rs));
             }
         } finally {
             if (rs != null) rs.close();
             if (ps != null) ps.close();
         }
-        return null;
+        return list;
     }
 
     @Override

@@ -52,20 +52,21 @@ public class RecipeDAOImpl implements DAO<Recipe, Integer> {
     }
 
     @Override
-    public Recipe getByParameter(String parameter, String value) throws SQLException {
+    public List<Recipe> getByParameter(String parameter, String value) throws SQLException {
+        List<Recipe> list = new ArrayList<>();
         try {
             connection = ConnectionFactory.getConnection();
             ps = connection.prepareStatement("SELECT * FROM recipes WHERE " + parameter + " = ?");
             ps.setString(1, value);
             rs = ps.executeQuery();
-            if (rs.next()) {
-                return getRecipeFromResultSet(rs);
+            while (rs.next()) {
+                list.add(getRecipeFromResultSet(rs));
             }
         } finally {
             if (rs != null) rs.close();
             if (ps != null) ps.close();
         }
-        return null;
+        return list;
     }
 
     @Override
