@@ -76,6 +76,7 @@ public class Sale {
     @Override
     public String toString() {
         return id + ". " + name + ". quantity: " + quantity + ", total price: " +
-                totalPrice + ", paid by cash: " + paidByCash + ", paid by card: " + paidByCard + ", date: " + date;
+                totalPrice + ", paid by cash: " + paidByCash + ", paid by card: " + paidByCard + ", date: " + date +
+                ", client: " + clientName;
     }
 }

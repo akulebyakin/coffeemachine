@@ -10,6 +10,7 @@ import tools.Printer;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -63,6 +64,10 @@ public class Main {
                         continue;
                     }
                     switch (operation) {
+                        case "help": {
+                            printAllCommands();
+                            break;
+                        }
                         // client service
                         case "menu": {
                             Printer.printList(clientService.getMenu());
@@ -173,6 +178,26 @@ public class Main {
                                 System.out.println("Success");
                             break;
                         }
+                        case "deleteRecipeByName": {
+                            String recipeName = "";
+                            while (recipeName.equals("")) {
+                                System.out.print("recipe name: ");
+                                recipeName = scanner.nextLine();
+                                int i;
+                                try {
+                                    i = adminService.deleteRecipeByName(recipeName);
+                                } catch (AdminService.AdminServiceException e) {
+                                    System.out.println(e.getMessage());
+                                    recipeName = "";
+                                    continue;
+                                }
+                                if (i == 1) {
+                                    System.out.println("Success");
+                                }
+                                break;
+                            }
+                            break;
+                        }
                         default:
                             System.out.println("I don't know that operation. Try again.");
                     }
@@ -191,5 +216,35 @@ public class Main {
             scanner.close();
         }
 
+    }
+
+    private static void printAllCommands() {
+        String[] clientCommands = {
+                "menu - get the menu",
+                "make Cappuccino - makes Cappuccino. Put any drink name instead of 'Cappuccino'." +
+                        " If a drink with the name exists, it will be made",
+                "getAllDrinkCompositions - get compositions of all drinks",
+                "getMostPopularDrinks - get a list with 5 most popular drinks",
+        };
+
+        String[] adminCommands = {
+                "getAllIngredients - get a list with all ingredients",
+                "getEndingIngredients - get a list with ending ingredients",
+                "getAllRecipes - display all recipes",
+                "getUnavailableRecipes - display all unavailable recipes",
+                "getAllSales - list of all sales",
+                "getSalesToday - list of only today sales",
+                "addIngredient - create new one or upgrade existing ingredient",
+                "createNewRecipe - cmake a new drink",
+                "deleteRecipeByName - delete a recipe. Notice: Composition of a drink will be deleted.",
+        };
+
+        System.out.println("List of all client commands:");
+        Arrays.stream(clientCommands)
+                .forEach(System.out::println);
+        System.out.println();
+        System.out.println("List of all admin commands:");
+        Arrays.stream(adminCommands)
+                .forEach(System.out::println);
     }
 }

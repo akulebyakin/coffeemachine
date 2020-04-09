@@ -22,6 +22,11 @@ public interface AdminService {
     int addIngredient(Ingredient ingredient);
     int addRecipe(Recipe recipe);
     int addDrinkCompositions(List<DrinkComposition> drinkCompositionList);
-    int deleteIngredientByName(int id);
-    int deleteRecipeByName(int id);
+    int deleteRecipeByName(String name) throws AdminServiceException;
+
+    class AdminServiceException extends Exception {
+        public AdminServiceException(String errorMessage) {
+            super(errorMessage);
+        }
+    }
 }

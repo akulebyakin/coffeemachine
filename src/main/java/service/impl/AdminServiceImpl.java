@@ -167,12 +167,19 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public int deleteIngredientByName(int id) {
-        return -1;
-    }
-
-    @Override
-    public int deleteRecipeByName(int id) {
+    public int deleteRecipeByName(String name) throws AdminServiceException {
+        try {
+            List<Recipe> recipeList = recipeDAO.getByParameter("name", name);
+            if (recipeList.isEmpty()) {
+                throw new AdminServiceException("There is no recipe with that name.");
+            }
+            for (Recipe recipe : recipeList) {
+                recipeDAO.delete(recipe.getId());
+            }
+            return 1;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return -1;
     }
 }
