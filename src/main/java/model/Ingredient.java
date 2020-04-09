@@ -13,6 +13,14 @@ public class Ingredient {
         this.unit = unit;
     }
 
+    public Ingredient(String name, int balance, String unit) {
+        this.name = name;
+        this.balance = balance;
+        this.unit = unit;
+
+        this.id = -1;
+    }
+
     public int getId() {
         return id;
     }

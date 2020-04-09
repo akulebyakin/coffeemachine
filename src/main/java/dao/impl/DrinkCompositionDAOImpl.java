@@ -23,7 +23,7 @@ public class DrinkCompositionDAOImpl implements DAO<DrinkComposition, Integer> {
     @Override
     public int insert(DrinkComposition drinkComposition) throws SQLException {
         try {
-            ps = connection.prepareStatement("INSERT INTO  drink_compositions VALUES (DEFAULT, ?, ?, ?)");
+            ps = connection.prepareStatement("INSERT INTO  drink_compositions VALUES (?, ?, ?)");
             ps.setInt(1, drinkComposition.getRecipeId());
             ps.setInt(2, drinkComposition.getIngredientId());
             ps.setInt(3, drinkComposition.getAmount());

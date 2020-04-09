@@ -1,5 +1,6 @@
 package service;
 
+import model.DrinkComposition;
 import model.Ingredient;
 import model.Recipe;
 import model.Sale;
@@ -11,16 +12,16 @@ public interface AdminService {
     List<Ingredient> getAllIngredients();
     List<Ingredient> getEndingIngredients(int minBalance);
     List<Recipe> getAllRecipes();
-    List<Recipe> getAvailableRecipes();
     List<Recipe> getUnavailableRecipes();
     List<Sale> getAllSales();
     List<Sale> getSalesToday();
+    int getRecipeIdByName(String name);
+    int getIngredientIdByName(String name);
 
     // make
     int addIngredient(Ingredient ingredient);
     int addRecipe(Recipe recipe);
-    int changeIngredientByName(int id, Ingredient ingredient);
-    int changeRecipeByName(int id, Ingredient ingredient);
+    int addDrinkCompositions(List<DrinkComposition> drinkCompositionList);
     int deleteIngredientByName(int id);
     int deleteRecipeByName(int id);
 }

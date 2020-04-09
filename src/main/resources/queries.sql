@@ -77,9 +77,9 @@ INSERT INTO `drink_compositions` (`recipe_id`, `ingredient_id`, `amount`) VALUES
 INSERT INTO `drink_compositions` (`recipe_id`, `ingredient_id`, `amount`) VALUES ('7', '9', '5');
 INSERT INTO `drink_compositions` (`recipe_id`, `ingredient_id`, `amount`) VALUES ('8', '1', '40');
 INSERT INTO `drink_compositions` (`recipe_id`, `ingredient_id`, `amount`) VALUES ('8', '2', '7');
-INSERT INTO `drink_compositions` (`recipe_id`, `ingredient_id`, `amount`) VALUES ('8', '3', '200');
-INSERT INTO `drink_compositions` (`recipe_id`, `ingredient_id`, `amount`) VALUES ('8', '4', '50');
-INSERT INTO `drink_compositions` (`recipe_id`, `ingredient_id`, `amount`) VALUES ('8', '5', '4');
+INSERT INTO `drink_compositions` (`recipe_id`, `ingredient_id`, `amount`) VALUES ('8', '3', '4');
+INSERT INTO `drink_compositions` (`recipe_id`, `ingredient_id`, `amount`) VALUES ('8', '4', '200');
+INSERT INTO `drink_compositions` (`recipe_id`, `ingredient_id`, `amount`) VALUES ('8', '5', '50');
 INSERT INTO `drink_compositions` (`recipe_id`, `ingredient_id`, `amount`) VALUES ('9', '1', '40');
 INSERT INTO `drink_compositions` (`recipe_id`, `ingredient_id`, `amount`) VALUES ('9', '2', '14');
 INSERT INTO `drink_compositions` (`recipe_id`, `ingredient_id`, `amount`) VALUES ('9', '4', '200');

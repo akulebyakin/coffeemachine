@@ -75,12 +75,7 @@ public class Sale {
 
     @Override
     public String toString() {
-        return "id:\t" + id + "\n" +
-                "name:\t" + name + "\n" +
-                "quantity:\t" + quantity + "\n" +
-                "total price:\t" + totalPrice + "\n" +
-                "paid by cash:\t" + paidByCash + "\n" +
-                "paid by card:\t" + paidByCard + "\n" +
-                "date:\t" + date;
+        return id + ". " + name + ". quantity: " + quantity + ", total price: " +
+                totalPrice + ", paid by cash: " + paidByCash + ", paid by card: " + paidByCard + ", date: " + date;
     }
 }

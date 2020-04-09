@@ -15,10 +15,13 @@ public class Recipe {
         this.totalSold = total_sold;
     }
 
-    public Recipe(String name, int price, boolean available) {
+    public Recipe(String name, int price) {
         this.name = name;
         this.price = price;
-        this.available = available;
+
+        this.id = -1;
+        this.available = true;
+        this.totalSold = 0;
     }
 
     public int getId() {

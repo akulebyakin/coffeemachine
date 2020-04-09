@@ -12,6 +12,7 @@ import service.ClientService;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class ClientServiceImpl implements ClientService {
@@ -73,12 +74,24 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public List<String> getMostPopularDrinks() {
-        return null;
+    public List<String> getMostPopularDrinks(int limit) {
+        List<String> mostPopularDrinksList = new ArrayList<>();
+        try {
+            List<Recipe> recipeList = recipeDAO.getAll();
+            recipeList.sort(Comparator.comparingInt(Recipe::getTotalSold).reversed());
+            for (Recipe recipe : recipeList) {
+                mostPopularDrinksList.add(recipe.getName() + " (Total sold: " + recipe.getTotalSold() + ")");
+            }
+            mostPopularDrinksList = mostPopularDrinksList.subList(0, limit + 1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return mostPopularDrinksList;
     }
 
     @Override
-    public int makeCoffee(String coffeeName, String clientName, String payMethod) {
+    public int makeCoffee(String coffeeName, String clientName, String payMethod) throws ClientServiceException {
+        String needMoreGold = "Need more gold! I mean not enough consumables: ";
         try {
             // we have only one recipe with unique name
             Recipe recipe = recipeDAO.getByParameter("name", coffeeName).get(0);
@@ -87,7 +100,6 @@ public class ClientServiceImpl implements ClientService {
 
             // check if its enough consumables on warehouse
             List<Ingredient> ingredientList = new ArrayList<>();
-            String needMoreGold = "Need more gold! I mean not enough consumables: ";
             boolean notEnoughGold = false;
             for (DrinkComposition drinkComposition : drinkCompositionList) {
                 int ingredient_id = drinkComposition.getIngredientId();
@@ -101,8 +113,7 @@ public class ClientServiceImpl implements ClientService {
             if (notEnoughGold) {
                 recipe.setAvailable(false);
                 recipeDAO.update(recipe.getId(), recipe);
-                System.out.println(needMoreGold);
-                return -1;
+                throw new ClientServiceException(needMoreGold);
             } else {
                 recipe.setAvailable(true);
                 recipeDAO.update(recipe.getId(), recipe);
@@ -130,7 +141,9 @@ public class ClientServiceImpl implements ClientService {
             recipeDAO.update(recipe.getId(), recipe);
 
             return saleDAO.insert(sale);
-        } catch (SQLException e) {
+        } catch (ClientServiceException e) {
+            throw new ClientServiceException(e.getMessage());
+        }  catch (SQLException e) {
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();

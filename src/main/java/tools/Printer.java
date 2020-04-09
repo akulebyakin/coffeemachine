@@ -12,15 +12,13 @@ public class Printer {
     }
 
     public static void printList(List list) {
-        for (Object o : list) {
-            System.out.println(o);
+        if (list != null && !list.isEmpty()) {
+            for (Object o : list) {
+                System.out.println(o);
+            }
+        } else {
+            System.out.println("List is empty");
         }
     }
-//    public static void printList(List<Recipe> list) {
-//        for (Recipe recipe : list) {
-//            System.out.println(recipe);
-//        }
-//    }
-
 
 }
