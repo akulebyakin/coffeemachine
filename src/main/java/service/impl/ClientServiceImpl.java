@@ -106,7 +106,7 @@ public class ClientServiceImpl implements ClientService {
                 Ingredient ingredient = ingredientDAO.get(ingredient_id);
                 if (ingredient.getBalance() < drinkComposition.getAmount()) {
                     notEnoughGold = true;
-                    needMoreGold += ingredient.getName();
+                    needMoreGold += " " + ingredient.getName();
                 }
                 ingredientList.add(ingredient);
             }
