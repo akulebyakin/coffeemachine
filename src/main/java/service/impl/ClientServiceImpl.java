@@ -34,8 +34,8 @@ public class ClientServiceImpl implements ClientService {
         List<String> menu = new ArrayList<>();
         try {
             for (Recipe recipe : recipeDAO.getAll()) {
-                menu.add(recipe.getId() + ". " + recipe.getName() + " - " + recipe.getPrice() + " rub. " +
-                        (recipe.isAvailable() ? "" : "Not available!"));
+                menu.add(recipe.getId() + ". " + recipe.getName() + " - " + recipe.getPrice() + " rub." +
+                        (recipe.isAvailable() ? "" : " Not available!"));
             }
         } catch (SQLException e) {
             e.printStackTrace();

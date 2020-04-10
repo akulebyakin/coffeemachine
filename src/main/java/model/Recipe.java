@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Objects;
+
 public class Recipe {
     private int id;
     private String name;
@@ -52,18 +54,26 @@ public class Recipe {
         this.available = available;
     }
 
-    //    @Override
-//    public String toString() {
-//        return "id:\t" + id + "\n" +
-//                "name:\t" + name + "\n" +
-//                "ingredients:\t" + "ingredients" + "\n" +
-//                "price:\t" + price + "\n" +
-//                "available:\t" + (available ? "yes" : "no") + "\n" +
-//                "total sold:\t" + totalSold;
-//    }
     @Override
     public String toString() {
         return "id: " + id + ", name: " + name + ", price: " + price +
                 ", available: " + (available ? "yes" : "no") + ", total sold: " + totalSold;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Recipe recipe = (Recipe) o;
+        return id == recipe.id &&
+                price == recipe.price &&
+                available == recipe.available &&
+                totalSold == recipe.totalSold &&
+                Objects.equals(name, recipe.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, price, available, totalSold);
     }
 }

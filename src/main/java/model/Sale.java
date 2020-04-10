@@ -1,6 +1,7 @@
 package model;
 
 import java.sql.Date;
+import java.util.Objects;
 
 public class Sale {
     private int id;
@@ -78,5 +79,25 @@ public class Sale {
         return id + ". " + name + ". quantity: " + quantity + ", total price: " +
                 totalPrice + ", paid by cash: " + paidByCash + ", paid by card: " + paidByCard + ", date: " + date +
                 ", client: " + clientName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Sale sale = (Sale) o;
+        return id == sale.id &&
+                quantity == sale.quantity &&
+                totalPrice == sale.totalPrice &&
+                paidByCash == sale.paidByCash &&
+                paidByCard == sale.paidByCard &&
+                Objects.equals(name, sale.name) &&
+                Objects.equals(date, sale.date) &&
+                Objects.equals(clientName, sale.clientName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, quantity, totalPrice, paidByCash, paidByCard, date, clientName);
     }
 }

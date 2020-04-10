@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Objects;
+
 public class DrinkComposition {
     private int recipeId;
     private int ingredientId;
@@ -38,5 +40,20 @@ public class DrinkComposition {
     @Override
     public String toString() {
         return "recipe_id: " + recipeId + ", ingredient_id: " + ingredientId + ", amount: " + amount;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DrinkComposition that = (DrinkComposition) o;
+        return recipeId == that.recipeId &&
+                ingredientId == that.ingredientId &&
+                amount == that.amount;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(recipeId, ingredientId, amount);
     }
 }
