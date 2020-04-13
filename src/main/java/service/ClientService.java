@@ -7,7 +7,7 @@ public interface ClientService {
     List<String> getMenu();
     List<String> getAllDrinkCompositions();
     List<String> getMostPopularDrinks(int limit);
-    int getPrice(String drinkName);
+    int getCoffeePrice(String drinkName);
 
     // make
     int makeCoffee(String coffeeName, String clientName, String payMethod) throws ClientServiceException;

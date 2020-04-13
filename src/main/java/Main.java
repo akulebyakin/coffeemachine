@@ -145,7 +145,7 @@ public class Main {
     }
 
     private static void clientCommandMakeCoffee(String coffeeName) {
-        int price = clientService.getPrice(coffeeName);
+        int price = clientService.getCoffeePrice(coffeeName);
         if (price == -1) {
             System.out.println("There is no drink with this name.");
             return;

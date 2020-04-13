@@ -82,7 +82,10 @@ public class ClientServiceImpl implements ClientService {
             for (Recipe recipe : recipeList) {
                 mostPopularDrinksList.add(recipe.getName() + " (Total sold: " + recipe.getTotalSold() + ")");
             }
-            mostPopularDrinksList = mostPopularDrinksList.subList(0, limit + 1);
+            if (limit > mostPopularDrinksList.size()) {
+                limit = mostPopularDrinksList.size();
+            }
+            mostPopularDrinksList = mostPopularDrinksList.subList(0, limit);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -153,7 +156,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public int getPrice(String drinkName) {
+    public int getCoffeePrice(String drinkName) {
         try {
             return recipeDAO.getByParameter("name", drinkName).get(0).getPrice();
         } catch (SQLException e) {

@@ -14,13 +14,15 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import service.ClientService;
 
-import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyInt;
 import static org.testng.Assert.assertEquals;
 
 public class ClientServiceImplTest {
@@ -56,9 +58,9 @@ public class ClientServiceImplTest {
         mockDrinkCompositionList.add(new DrinkComposition(100, 10, 40));
         mockDrinkCompositionList.add(new DrinkComposition(100, 20, 7));
 
-        saleDaoList = new ArrayList<>();
-        saleDaoList.add(new Sale(500, "Test", 1, 500, 500,
-                0, new Date(1234567), "Test Client"));
+//        saleDaoList = new ArrayList<>();
+//        saleDaoList.add(new Sale(500, "Test", 1, 500, 500,
+//                0, new Date(1234567), "Test Client"));
     }
 
     @BeforeMethod
@@ -66,10 +68,15 @@ public class ClientServiceImplTest {
         MockitoAnnotations.initMocks(this);
 
         given(recipeDAO.getAll()).willReturn(mockRecipeList);
-        given(recipeDAO.getByParameter("id", "100")).willReturn(mockRecipeList);
+//        given(recipeDAO.getByParameter("id", "100")).willReturn(mockRecipeList);
+        given(recipeDAO.getByParameter("name", "Test")).willReturn(mockRecipeList);
         given(drinkCompositionDAO.getByParameter("recipe_id", "100")).willReturn(mockDrinkCompositionList);
         given(ingredientDAO.get(10)).willReturn(mockIngredientList.get(0));
         given(ingredientDAO.get(20)).willReturn(mockIngredientList.get(1));
+
+        given(recipeDAO.update(anyInt(), any())).willReturn(1);
+        given(ingredientDAO.update(anyInt(), any())).willReturn(1);
+        given(saleDAO.insert(any())).willReturn(1);
     }
 
     @Test
@@ -89,14 +96,19 @@ public class ClientServiceImplTest {
 
     @Test
     public void testGetMostPopularDrinks() {
-
+        List<String> serviceMenu = clientService.getMostPopularDrinks(1);
+        String expectedResult = "Test (Total sold: 42)";
+        assertEquals(serviceMenu.get(0), expectedResult);
     }
 
     @Test
-    public void testMakeCoffee() {
+    public void testMakeCoffee() throws ClientService.ClientServiceException {
+        int actualResult = clientService.makeCoffee("Test", "Test Client", "cash");
+        assertEquals(actualResult, 1);
     }
 
     @Test
-    public void testGetPrice() {
+    public void testGetCoffeePrice() {
+        assertEquals(clientService.getCoffeePrice("Test"), 500);
     }
 }

@@ -13,6 +13,7 @@ public class ConnectionFactory {
             "&serverTimezone=UTC";
     private static final String USER = "root";
     private static final String PASSWORD = "123456";
+//    private static final String PASSWORD = "";
 
     public static Connection getConnection() throws SQLException {
         if (connection == null) {

@@ -12,10 +12,7 @@ import service.AdminService;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class AdminServiceImpl implements AdminService {
     private IngredientDAOImpl ingredientDAO;
@@ -45,8 +42,10 @@ public class AdminServiceImpl implements AdminService {
     public List<Ingredient> getEndingIngredients(int minBalance) {
         List<Ingredient> endingIngredientsList = new ArrayList<>();
         try {
-            endingIngredientsList = ingredientDAO.getAll();
-            endingIngredientsList.removeIf(o1 -> o1.getBalance() > minBalance);
+            for (Ingredient ingredient : ingredientDAO.getAll()) {
+                if (ingredient.getBalance() <= minBalance)
+                    endingIngredientsList.add(ingredient);
+            }
             endingIngredientsList.sort((Comparator.comparingInt(Ingredient::getBalance)));
         } catch (SQLException e) {
             e.printStackTrace();
