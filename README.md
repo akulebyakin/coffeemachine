@@ -32,14 +32,14 @@ get in a certain order, get statistics based on the received data etc.);
 
 **recipes** - composition of each drink and its price <br>
 
-    +----+------------------+--------------------+-------------------------+-------+-----------+------------+
-    | id | name             | ingredient_ids     | ingredient_amount       | price | available | total_sold |
-    +----+------------------+--------------------+-------------------------+-------+-----------+------------+
-    |  1 | Espresso         | [1, 2]             | [40, 7]                 |   105 |         1 |          0 |
-    |  2 | Double espresso  | [1, 2]             | [80, 14]                |   175 |         1 |          0 |
-    |  3 | Americano        | [1, 2]             | [200, 7]                |   105 |         1 |          0 |
-    +----+------------------+--------------------+-------------------------+-------+-----------+------------+
-
+    +----+------------------+-------+-----------+------------+
+    | id | name             | price | available | total_sold |
+    +----+------------------+-------+-----------+------------+
+    |  1 | Espresso         |   105 |         1 |          6 |
+    |  2 | Double espresso  |   175 |         1 |          1 |
+    |  3 | Americano        |   105 |         1 |          4 |
+    +----+------------------+-------+-----------+------------+
+    
 **drinks_sold** - sales information <br>
 
     +----+------------+----------+-------------+--------------+--------------+---------------------+-------------+
@@ -49,10 +49,23 @@ get in a certain order, get statistics based on the received data etc.);
     |  2 | Raf        |        1 |         275 |            0 |          275 | 2020-04-04 17:57:26 | Andrey      |
     |  3 | Cappuccino |        1 |         225 |            0 |          225 | 2020-04-04 17:57:53 | Andrey      |
     +----+------------+----------+-------------+--------------+--------------+---------------------+-------------+
+    
+**drink_compositions;** - intermediate table that contains compositions of the drinks <br>
+
+    +-----------+---------------+--------+
+    | recipe_id | ingredient_id | amount |
+    +-----------+---------------+--------+
+    |         1 |             1 |     40 |
+    |         1 |             2 |      7 |
+    |         2 |             1 |     80 |
+    |         2 |             2 |     14 |
+    |         3 |             1 |    200 |
+    |         3 |             2 |      7 |
+    +-----------+---------------+--------+
  
- #### Code structure (temp)<br>
+#### Code structure<br>
  
- ![code structure](http://joxi.ru/gmvExPdfvKnB8r.png)
+ ![code structure](http://joxi.ru/nAy5yPZujDo4VA.png)
  
 ---
 
@@ -63,36 +76,23 @@ Introduce yourself! <br>
     Welcome to the Red Tiger Coffee House! Please tell me your name.
     My name is: Andrey
 
-Choose an action. Available operations:<br> 
-**menu** - displays the menu <br>
+If you type 'admin', you'll get access to special features.
+Choose an action. Type 'help' to get all available commands Available operations:<br> 
 
-    Operation: menu
-    1. Espresso - 105 rub. 
-    2. Double espresso - 175 rub. 
-    3. Americano - 105 rub. 
-    4. Cappuccino - 225 rub. 
-    5. Latte - 225 rub. 
-    6. Moccaccino Dark - 300 rub. Not available!
-    7. Moccaccino White - 300 rub. 
-    8. Raf - 275 rub. 
-    9. Flat White - 250 rub. 
-
-**make Cappuccino** - makes Cappuccino. Put any drink name instead of 'Cappuccino'. 
-If a drink with the name exists, it will be made <br>
-
-    Operation: make Cappuccino
-    I'm making 'Cappuccino'
-    Done! Drinks made: 1
-
-**getAllDrinkCompositions** - displays composition of all drinks
-
-     Operation: getDrinkComposition
-     1. Espresso:
-     	Water - 40 ml
-     	Coffee - 7 g
-     
-     2. Double espresso:
-     	Water - 80 ml
-     	Coffee - 14 g
-     ...
-  
+    List of all client commands:
+    	menu - get the menu
+    	make Cappuccino - makes Cappuccino. Put any drink name instead of 'Cappuccino'. 
+    	  If a drink with the name exists, it will be made
+    	getAllDrinkCompositions - get compositions of all drinks
+    	getMostPopularDrinks - get a list with 5 most popular drinks
+    
+    List of all admin commands:
+    	getAllIngredients - get a list with all ingredients
+    	getEndingIngredients - get a list with ending ingredients
+    	getAllRecipes - display all recipes
+    	getUnavailableRecipes - display all unavailable recipes
+    	getAllSales - list of all sales
+    	getSalesToday - list of only today sales
+    	addIngredient - create new one or upgrade existing ingredient
+    	createNewRecipe - cmake a new drink
+    	deleteRecipeByName - delete a recipe. Notice: Composition of a drink will be deleted.
