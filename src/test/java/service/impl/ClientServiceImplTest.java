@@ -20,7 +20,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.when;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.testng.Assert.assertEquals;
@@ -67,16 +67,16 @@ public class ClientServiceImplTest {
     public void init() throws SQLException {
         MockitoAnnotations.initMocks(this);
 
-        given(recipeDAO.getAll()).willReturn(mockRecipeList);
-//        given(recipeDAO.getByParameter("id", "100")).willReturn(mockRecipeList);
-        given(recipeDAO.getByParameter("name", "Test")).willReturn(mockRecipeList);
-        given(drinkCompositionDAO.getByParameter("recipe_id", "100")).willReturn(mockDrinkCompositionList);
-        given(ingredientDAO.get(10)).willReturn(mockIngredientList.get(0));
-        given(ingredientDAO.get(20)).willReturn(mockIngredientList.get(1));
+        when(recipeDAO.getAll()).thenReturn(mockRecipeList);
+//        when(recipeDAO.getByParameter("id", "100")).thenReturn()(mockRecipeList);
+        when(recipeDAO.getByParameter("name", "Test")).thenReturn(mockRecipeList);
+        when(drinkCompositionDAO.getByParameter("recipe_id", "100")).thenReturn(mockDrinkCompositionList);
+        when(ingredientDAO.get(10)).thenReturn(mockIngredientList.get(0));
+        when(ingredientDAO.get(20)).thenReturn(mockIngredientList.get(1));
 
-        given(recipeDAO.update(anyInt(), any())).willReturn(1);
-        given(ingredientDAO.update(anyInt(), any())).willReturn(1);
-        given(saleDAO.insert(any())).willReturn(1);
+        when(recipeDAO.update(anyInt(), any())).thenReturn(1);
+        when(ingredientDAO.update(anyInt(), any())).thenReturn(1);
+        when(saleDAO.insert(any())).thenReturn(1);
     }
 
     @Test

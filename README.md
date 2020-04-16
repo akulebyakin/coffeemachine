@@ -30,7 +30,7 @@ get in a certain order, get statistics based on the received data etc.);
     |  3 | Sugar           |     500 | g    |
     +----+-----------------+---------+------+
 
-**recipes** - composition of each drink and its price <br>
+**recipes** - name of each drink and its price <br>
 
     +----+------------------+-------+-----------+------------+
     | id | name             | price | available | total_sold |
@@ -50,7 +50,7 @@ get in a certain order, get statistics based on the received data etc.);
     |  3 | Cappuccino |        1 |         225 |            0 |          225 | 2020-04-04 17:57:53 | Andrey      |
     +----+------------+----------+-------------+--------------+--------------+---------------------+-------------+
     
-**drink_compositions;** - intermediate table that contains compositions of the drinks <br>
+**drink_compositions** - intermediate table that contains compositions of the drinks <br>
 
     +-----------+---------------+--------+
     | recipe_id | ingredient_id | amount |

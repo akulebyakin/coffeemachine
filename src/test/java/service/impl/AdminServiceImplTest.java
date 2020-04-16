@@ -19,7 +19,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.when;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.times;
@@ -70,26 +70,26 @@ public class AdminServiceImplTest {
     public void init() throws SQLException {
         MockitoAnnotations.initMocks(this);
 
-        given(recipeDAO.getAll()).willReturn(mockRecipeList);
-        given(recipeDAO.getByParameter("available", "0"))
-                .willReturn(mockRecipeList.subList(1, mockRecipeList.size()));
-        given(recipeDAO.getByParameter("name", "Test")).willReturn(mockRecipeList.subList(0, 1));
-        given(recipeDAO.getByParameter("name", "Unavailable recipe"))
-                .willReturn(mockRecipeList.subList(1, mockRecipeList.size()));
-        given(ingredientDAO.getAll()).willReturn(mockIngredientList);
-        given(ingredientDAO.getByParameter("name", "Ingredient One")).willReturn(mockIngredientList.subList(0, 1));
-        given(saleDAO.getAll()).willReturn(mockSaleList);
+        when(recipeDAO.getAll()).thenReturn(mockRecipeList);
+        when(recipeDAO.getByParameter("available", "0"))
+                .thenReturn(mockRecipeList.subList(1, mockRecipeList.size()));
+        when(recipeDAO.getByParameter("name", "Test")).thenReturn(mockRecipeList.subList(0, 1));
+        when(recipeDAO.getByParameter("name", "Unavailable recipe"))
+                .thenReturn(mockRecipeList.subList(1, mockRecipeList.size()));
+        when(ingredientDAO.getAll()).thenReturn(mockIngredientList);
+        when(ingredientDAO.getByParameter("name", "Ingredient One")).thenReturn(mockIngredientList.subList(0, 1));
+        when(saleDAO.getAll()).thenReturn(mockSaleList);
 
 
-        given(ingredientDAO.update(anyInt(), any())).willReturn(1);
-        given(ingredientDAO.insert(any())).willReturn(1);
+        when(ingredientDAO.update(anyInt(), any())).thenReturn(1);
+        when(ingredientDAO.insert(any())).thenReturn(1);
 
-        given(recipeDAO.update(anyInt(), any())).willReturn(1);
-        given(recipeDAO.insert(any())).willReturn(1);
-        given(recipeDAO.delete(any())).willReturn(1);
+        when(recipeDAO.update(anyInt(), any())).thenReturn(1);
+        when(recipeDAO.insert(any())).thenReturn(1);
+        when(recipeDAO.delete(any())).thenReturn(1);
 
-        given(drinkCompositionDAO.update(anyInt(), any())).willReturn(1);
-        given(drinkCompositionDAO.insert(any())).willReturn(1);
+        when(drinkCompositionDAO.update(anyInt(), any())).thenReturn(1);
+        when(drinkCompositionDAO.insert(any())).thenReturn(1);
     }
 
     @Test

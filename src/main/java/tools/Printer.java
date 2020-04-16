@@ -11,9 +11,19 @@ public class Printer {
 
     }
 
-    public static void printList(List list) {
+//    public static void printList(List list) {
+//        if (list != null && !list.isEmpty()) {
+//            for (Object o : list) {
+//                System.out.println(o);
+//            }
+//        } else {
+//            System.out.println("List is empty");
+//        }
+//    }
+
+    public static <T> void printList(List<T> list) {
         if (list != null && !list.isEmpty()) {
-            for (Object o : list) {
+            for (T o : list) {
                 System.out.println(o);
             }
         } else {
