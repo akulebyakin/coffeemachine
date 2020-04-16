@@ -68,7 +68,7 @@ public class AdminServiceImplTest {
     }
 
     @BeforeMethod
-    public void init() throws SQLException {
+    public void init() {
         MockitoAnnotations.initMocks(this);
     }
 

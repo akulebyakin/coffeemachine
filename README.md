@@ -76,8 +76,8 @@ Introduce yourself! <br>
     Welcome to the Red Tiger Coffee House! Please tell me your name.
     My name is: Andrey
 
-If you type 'admin', you'll get access to special features.
-Choose an action. Type 'help' to get all available commands Available operations:<br> 
+If you type 'admin', you'll get access to special features.<br>
+Choose an action. Type 'help' to get all available commands:<br> 
 
     List of all client commands:
     	menu - get the menu
