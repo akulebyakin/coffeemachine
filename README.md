@@ -3,7 +3,7 @@ Project for EPAM training
 
 ### Task: <br>
 **Coffee machine system.** <br>
-The coffee machine has a set of drinks. Customer can buy one or more drinks.
+The coffee machine has a set of drinks. Customer can buy one or more delightful drinks.
 
 **What needs to be done:** <br>
 1. Create a database (MySQL, MS SQL, SQLite, PostgreSQL etc.);
