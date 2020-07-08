@@ -20,7 +20,7 @@ get in a certain order, get statistics based on the received data etc.);
 ### Project Structure <br>
 #### MySQL tables<br>
 
-**ingredients** - coffee ingredients <br>
+**ingredients** - drink ingredients <br>
 
     +----+-----------------+---------+------+
     | id | name            | balance | unit |
