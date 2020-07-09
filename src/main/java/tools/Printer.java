@@ -23,9 +23,17 @@ public class Printer {
 
     public static <T> void printList(List<T> list) {
         if (list != null && !list.isEmpty()) {
+            for (int i = 0; i < list.get(0).toString().length() - 1; i++) {
+                System.out.print("-");
+            }
+            System.out.println();
             for (T o : list) {
                 System.out.println(o);
             }
+            for (int i = 0; i < list.get(0).toString().length() - 1; i++) {
+                System.out.print("-");
+            }
+            System.out.println();
         } else {
             System.out.println("List is empty");
         }

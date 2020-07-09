@@ -32,10 +32,14 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public List<String> getMenu() {
         List<String> menu = new ArrayList<>();
+        String format = "|%-3s| %-25s | %-8s| %s";
         try {
+//            menu.add(String.format(format, "#", "Drink name", "price", ""));
             for (Recipe recipe : recipeDAO.getAll()) {
-                menu.add(recipe.getId() + ". " + recipe.getName() + " - " + recipe.getPrice() + " rub." +
-                        (recipe.isAvailable() ? "" : " Not available!"));
+//                menu.add(recipe.getId() + ". " + recipe.getName() + " - " + recipe.getPrice() + " rub." +
+//                        (recipe.isAvailable() ? "" : " Not available!"));
+                menu.add(String.format(format, recipe.getId(), recipe.getName(), recipe.getPrice() + " rub.",
+                        (recipe.isAvailable() ? "" : " Not available!")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
