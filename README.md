@@ -1,5 +1,5 @@
 # coffeemachine
-Project for EPAM training
+Project for Java EPAM training
 
 ### Task: <br>
 **Coffee machine system.** <br>
