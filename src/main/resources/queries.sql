@@ -1,4 +1,6 @@
---ingredients
+CREATE DATABASE `coffeemachine`;
+USE `coffeemachine`;
+
 CREATE TABLE `ingredients` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(100) NULL,
@@ -20,7 +22,6 @@ INSERT INTO `ingredients` VALUES (DEFAULT, 'Coconut flakes', '50', 'g');
 
 
 
---recipes
 CREATE TABLE recipes(
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -41,7 +42,6 @@ INSERT INTO `recipes` VALUES (DEFAULT, 'Flat White', 250, DEFAULT, DEFAULT);
 
 
 
---drink_compositions
 CREATE TABLE drink_compositions(
     recipe_id INT NOT NULL,
     ingredient_id INT NOT NULL,
@@ -85,13 +85,14 @@ INSERT INTO `drink_compositions` (`recipe_id`, `ingredient_id`, `amount`) VALUES
 INSERT INTO `drink_compositions` (`recipe_id`, `ingredient_id`, `amount`) VALUES ('9', '4', '200');
 
 
---drinks_sold
 CREATE TABLE `drinks_sold` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(100) NULL,
   `quantity` INT NOT NULL,
+  `total_price` INT NOT NULL,
   `paid_by_cash` INT NOT NULL DEFAULT 0,
   `paid_by_card` INT NOT NULL DEFAULT 0,
   `date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `client_name` VARCHAR(100) NULL,
   PRIMARY KEY (`id`)
 );

@@ -113,6 +113,7 @@ public class Main {
                             break;
                         }
                         case "exit": {
+                            System.out.println("Bye-bye! :)");
                             break;
                         }
                         default:

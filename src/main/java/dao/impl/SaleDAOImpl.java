@@ -4,10 +4,10 @@ import dao.DAO;
 import model.Sale;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +34,7 @@ public class SaleDAOImpl implements DAO<Sale, Integer> {
 //            ps.setDate(6, sale.getDate());
             ps.setString(6, sale.getClientName());
             return ps.executeUpdate();
-        }finally {
+        } finally {
             if (ps != null) ps.close();
         }
     }
